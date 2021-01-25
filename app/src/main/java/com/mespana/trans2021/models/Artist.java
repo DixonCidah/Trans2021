@@ -63,6 +63,30 @@ public class Artist {
         }
     }
 
+    public Artist(String recordid, String origine_ville1, String spotify, long premiere_date_timestamp, String cou_official_lang_code, String cou_onu_code, String artistes, String cou_iso2_code, String cou_iso3_code, double geo_point_2d_x, double geo_point_2d_y, String premiere_salle, String cou_is_receiving_quest, String edition, String cou_text_sp, String premiere_date, String cou_is_ilomember, String annee, String deezer, String cou_text_en, String origine_pays1) {
+        this.recordid = recordid;
+        this.origine_ville1 = origine_ville1;
+        this.spotify = spotify;
+        this.premiere_date_timestamp = premiere_date_timestamp;
+        this.cou_official_lang_code = cou_official_lang_code;
+        this.cou_onu_code = cou_onu_code;
+        this.artistes = artistes;
+        this.cou_iso2_code = cou_iso2_code;
+        this.cou_iso3_code = cou_iso3_code;
+        this.geo_point_2d_x = geo_point_2d_x;
+        this.geo_point_2d_y = geo_point_2d_y;
+        this.premiere_salle = premiere_salle;
+        this.cou_is_receiving_quest = cou_is_receiving_quest;
+        this.edition = edition;
+        this.cou_text_sp = cou_text_sp;
+        this.premiere_date = premiere_date;
+        this.cou_is_ilomember = cou_is_ilomember;
+        this.annee = annee;
+        this.deezer = deezer;
+        this.cou_text_en = cou_text_en;
+        this.origine_pays1 = origine_pays1;
+    }
+
     public String getRecordid() {
         return recordid;
     }

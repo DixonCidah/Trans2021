@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -13,11 +14,17 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.mespana.trans2021.R;
+import com.mespana.trans2021.databinding.FragmentDisplayBinding;
+import com.mespana.trans2021.databinding.FragmentListBinding;
+import com.mespana.trans2021.models.Artist;
+import com.mespana.trans2021.services.JsonParsingService;
+import com.mespana.trans2021.ui.list.ArtistsRecyclerViewAdapter;
 import com.mespana.trans2021.ui.main.PageViewModel;
 import com.mespana.trans2021.ui.main.PlaceholderFragment;
 
 public class DisplayFragment extends Fragment {
 
+    FragmentDisplayBinding binding;
     private static final String ARG_SECTION_NUMBER = "section_number";
 
     @Override
@@ -29,14 +36,33 @@ public class DisplayFragment extends Fragment {
     public View onCreateView(
             @NonNull LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_main, container, false);
-        final TextView textView = root.findViewById(R.id.section_label);
-        /*pageViewModel.getText().observe(this, new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });*/
+        binding = FragmentDisplayBinding.inflate(inflater, container, false);
+        Artist test = new Artist("recordid", "Londres", "spotify", 20210125, "cou_official_lang_code", "cou_onu_code", "Samm Henshaw", "cou_iso2_code", "cou_iso3_code", 0.0, 0.0, "Parc des Expositions - Hall 5", "cou_is_receiving_quest", "26èmes Rencontres Trans Musicales", "cou_text_sp", "01-déc-04", "cou_is_ilomember", "annee", "deezer", "cou_text_en", "Royaume-Uni");
+        binding.country.setText(test.getOrigine_pays1());
+        binding.city.setText(test.getOrigine_ville1());
+
+        String deezer = test.getDeezer();
+        if(deezer == null) {
+            binding.deezer.setVisibility(View.GONE);
+        } else {
+            binding.deezer.setOnClickListener(v -> {
+                // TODO lance le profil Deezer
+            });
+        }
+
+        String spotify = test.getDeezer();
+        if(spotify == null) {
+            binding.deezer.setVisibility(View.GONE);
+        } else {
+            binding.deezer.setOnClickListener(v -> {
+                // TODO lance le profil Spotify
+            });
+        }
+        // si pas d'image récupérée, on met l'image de base (ic_profile)
+        //binding.roundedImage.setImageDrawable();
+        binding.roundedImage.setImageDrawable(getContext().getDrawable(R.drawable.samm_henshaw));
+        View root = binding.getRoot();
+        // TODO Use shared prefs to store index of clicked artist and then retrieve it inside the list
         return root;
     }
 }

@@ -3,4 +3,10 @@
     <string name="tab_text_1">ListView</string>
     <string name="tab_text_2">SearchView</string>
     <string name="tab_text_3">MapView</string>
+    <string name="no_deezer_profile">\" n\'a pas de profil Deezer.\"</string>
+    <string name="no_spotify_profile">\" n\'a pas de profil Spotify.\"</string>
+    <string name="star_rating">Popularité</string>
+    <string name="community_s_thoughts">Avis de la communauté</string>
+    <string name="unknown_artists">Artistes inconnus</string>
+    <string name="edition">Edition</string>
 </resources>

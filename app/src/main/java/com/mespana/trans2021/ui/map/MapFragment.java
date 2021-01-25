@@ -7,13 +7,14 @@ import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.mespana.trans2021.R;
 import com.mespana.trans2021.models.Artist;
 import com.mespana.trans2021.services.JsonParsingService;
+import com.mespana.trans2021.ui.display.DisplayFragment;
 
 import org.osmdroid.api.IMapController;
 import org.osmdroid.config.Configuration;
@@ -25,11 +26,11 @@ import org.osmdroid.views.overlay.ItemizedOverlayWithFocus;
 import org.osmdroid.views.overlay.OverlayItem;
 
 import java.util.ArrayList;
-
+import java.util.Objects;
 
 public class MapFragment extends Fragment {
 
-    private Context ctx;
+    Context ctx;
 
     private ArrayList<OverlayItem> items;
 
@@ -45,8 +46,8 @@ public class MapFragment extends Fragment {
         StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
         StrictMode.setThreadPolicy(policy);
 
-        ctx = getActivity().getApplicationContext();
-        Configuration.getInstance().load(ctx, PreferenceManager.getDefaultSharedPreferences(ctx));
+        ctx = getContext();
+        Configuration.getInstance().load(getContext(), PreferenceManager.getDefaultSharedPreferences(ctx));
     }
 
     @Override
@@ -67,15 +68,26 @@ public class MapFragment extends Fragment {
         mapController.setZoom(5.0);
 
         this.createMarkersList();
+        this.putMarkers(map);
 
         GeoPoint startPoint = new GeoPoint(items.get(0).getPoint().getLatitude(), items.get(0).getPoint().getLongitude());
         mapController.setCenter(startPoint);
 
+        return v;
+    }
+
+    private void putMarkers(MapView map) {
         ItemizedOverlayWithFocus<OverlayItem> mOverlay = new ItemizedOverlayWithFocus<>(ctx, items,
                 new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
                     @Override
                     public boolean onItemSingleTapUp(int index, OverlayItem item) {
-                        // TODO : Passer sur le Fragment de display en single tap ?
+                        // TODO : quand Display sera prêt : Fragment newFragment = new DisplayFragment(item.getTitle()); (le title est l'id nécessaire pour retrouvé le grp dnas le json)
+                        Fragment newFragment = new DisplayFragment();
+                        FragmentTransaction transaction = Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction();
+
+                        transaction.replace(R.id.view_pager, newFragment);
+
+                        transaction.commit();
                         return false;
                     }
 
@@ -87,14 +99,12 @@ public class MapFragment extends Fragment {
         mOverlay.setFocusItemsOnTap(true);
 
         map.getOverlays().add(mOverlay);
-
-        return v;
     }
 
     private void createMarkersList() {
         for(Artist a : JsonParsingService.getArtistList()) {
-            items.add(new OverlayItem(a.getArtistes(),
-                    a.getOrigine_pays1(),
+            items.add(new OverlayItem(a.getRecordid(),
+                    a.getArtistes(),
                     new GeoPoint(a.getGeo_point_2d_x(),a.getGeo_point_2d_y())));
         }
     }

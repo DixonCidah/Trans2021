@@ -4,11 +4,16 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import com.mespana.trans2021.R;
+import com.mespana.trans2021.databinding.FragmentListBinding;
+import com.mespana.trans2021.services.JsonParsingService;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
 public class ListFragment extends Fragment {
+
+    FragmentListBinding binding;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -18,7 +23,9 @@ public class ListFragment extends Fragment {
     public View onCreateView(
             @NonNull LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
-        View root = inflater.inflate(R.layout.fragment_list, container, false);
+        binding = FragmentListBinding.inflate(inflater, container, false);
+        binding.list.setAdapter(new ArtistsRecyclerViewAdapter(JsonParsingService.getArtistList()));
+        View root = binding.getRoot();
         return root;
     }
 }

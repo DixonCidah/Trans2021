@@ -24,7 +24,7 @@ public class ListFragment extends Fragment {
             @NonNull LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         binding = FragmentListBinding.inflate(inflater, container, false);
-        binding.list.setAdapter(new ArtistsRecyclerViewAdapter(JsonParsingService.getArtistList()));
+        binding.list.setAdapter(new ArtistsRecyclerViewAdapter(getActivity(), JsonParsingService.getArtistList()));
         View root = binding.getRoot();
         return root;
     }

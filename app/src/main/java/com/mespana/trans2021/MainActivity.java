@@ -14,15 +14,18 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.mespana.trans2021.models.Artist;
 import com.mespana.trans2021.services.JsonParsingService;
 import com.mespana.trans2021.ui.main.SectionsPagerAdapter;
+
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.e("testparse",JsonParsingService.parseJson(this).toString());
+        JsonParsingService.parseJson(this);
         setContentView(R.layout.activity_main);
         SectionsPagerAdapter sectionsPagerAdapter = new SectionsPagerAdapter(this, getSupportFragmentManager());
         ViewPager viewPager = findViewById(R.id.view_pager);
@@ -30,7 +33,6 @@ public class MainActivity extends AppCompatActivity {
         TabLayout tabs = findViewById(R.id.tabs);
         tabs.setupWithViewPager(viewPager);
         FloatingActionButton fab = findViewById(R.id.fab);
-
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

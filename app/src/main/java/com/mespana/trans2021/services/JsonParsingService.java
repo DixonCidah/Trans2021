@@ -10,11 +10,16 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class JsonParsingService {
-    public static List<Artist> parseJson(Context context){
+
+    private static List<Artist> artistList;
+
+    public static void parseJson(Context context){
         Gson gson = new Gson();
         InputStream inputStream = context.getResources().openRawResource(R.raw.out);
         StringBuilder resultStringBuilder = new StringBuilder();
@@ -27,6 +32,10 @@ public class JsonParsingService {
             e.printStackTrace();
         }
         Artist[] object = gson.fromJson(resultStringBuilder.toString(), Artist[].class);
-        return Arrays.asList(object);
+        artistList = Arrays.asList(object);
+    }
+
+    public static List<Artist> getArtistList(){
+        return Collections.unmodifiableList(artistList);
     }
 }

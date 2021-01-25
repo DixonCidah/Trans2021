@@ -35,6 +35,7 @@ public class Artist {
                 JSONObject fields = jsonObject.getJSONObject("fields");
                 this.origine_ville1 = fields.has("origine_ville1") && !fields.isNull("origine_ville1") ? fields.getString("origine_ville1") : "";
                 this.spotify = fields.has("spotify") && !fields.isNull("spotify") ? fields.getString("spotify") : "";
+                this.deezer = fields.has("deezer") && !fields.isNull("deezer") ? fields.getString("deezer") : "";
                 this.premiere_date_timestamp = fields.has("1ere_date_timestamp") && !fields.isNull("1ere_date_timestamp") ? fields.getLong("1ere_date_timestamp") : 0;
                 this.cou_official_lang_code = fields.has("cou_official_lang_code") && !fields.isNull("cou_official_lang_code") ? fields.getString("cou_official_lang_code") : "";
                 this.cou_onu_code = fields.has("cou_onu_code") && !fields.isNull("cou_onu_code") ? fields.getString("cou_onu_code") : "";
@@ -48,7 +49,6 @@ public class Artist {
                 this.premiere_date = fields.has("1ere_date") && !fields.isNull("1ere_date") ? fields.getString("1ere_date") : "";
                 this.cou_is_ilomember = fields.has("cou_is_ilomember") && !fields.isNull("cou_is_ilomember") ? fields.getString("cou_is_ilomember") : "";
                 this.annee = fields.has("annee") && !fields.isNull("annee") ? fields.getString("annee") : "";
-                this.deezer = fields.has("deezer") && !fields.isNull("deezer") ? fields.getString("deezer") : "";
                 this.cou_text_en = fields.has("cou_text_en") && !fields.isNull("cou_text_en") ? fields.getString("cou_text_en") : "";
                 this.origine_pays1 = fields.has("origine_pays1") && !fields.isNull("origine_pays1") ? fields.getString("origine_pays1") : "";
                 if (fields.has("geo_point_2d")) {

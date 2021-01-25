@@ -2,23 +2,12 @@ package com.mespana.trans2021;
 
 import android.os.Bundle;
 
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.tabs.TabLayout;
-
-import androidx.viewpager.widget.ViewPager;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.ViewPager;
 
-import android.util.Log;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-
-import com.mespana.trans2021.models.Artist;
+import com.google.android.material.tabs.TabLayout;
 import com.mespana.trans2021.services.JsonParsingService;
 import com.mespana.trans2021.ui.main.SectionsPagerAdapter;
-
-import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 

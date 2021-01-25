@@ -15,6 +15,7 @@ import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 
 public class JsonParsingService {
 
@@ -40,6 +41,10 @@ public class JsonParsingService {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    public static Optional<Artist> getArtistFromRecordId(String recordId){
+        return artistList.stream().filter(artist -> artist.getRecordid().equals(recordId)).findAny();
     }
 
     public static List<Artist> getArtistList(){

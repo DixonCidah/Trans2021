@@ -7,10 +7,13 @@ import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
 import com.mespana.trans2021.R;
+import com.mespana.trans2021.models.Artist;
+import com.mespana.trans2021.services.JsonParsingService;
 
 import org.osmdroid.api.IMapController;
 import org.osmdroid.config.Configuration;
@@ -68,17 +71,16 @@ public class MapFragment extends Fragment {
         GeoPoint startPoint = new GeoPoint(items.get(0).getPoint().getLatitude(), items.get(0).getPoint().getLongitude());
         mapController.setCenter(startPoint);
 
-        ItemizedOverlayWithFocus<OverlayItem> mOverlay = new ItemizedOverlayWithFocus<OverlayItem>(ctx, items,
+        ItemizedOverlayWithFocus<OverlayItem> mOverlay = new ItemizedOverlayWithFocus<>(ctx, items,
                 new ItemizedIconOverlay.OnItemGestureListener<OverlayItem>() {
                     @Override
                     public boolean onItemSingleTapUp(int index, OverlayItem item) {
-                        System.out.println("SingleTap");
+                        // TODO : Passer sur le Fragment de display en single tap ?
                         return false;
                     }
 
                     @Override
                     public boolean onItemLongPress(int index, OverlayItem item) {
-                        System.out.println("LongPress");
                         return false;
                     }
                 });
@@ -90,8 +92,11 @@ public class MapFragment extends Fragment {
     }
 
     private void createMarkersList() {
-
-        items.add(new OverlayItem("Test Title", "Test Description", new GeoPoint(42.1820291785d,-2.75442214946d)));
+        for(Artist a : JsonParsingService.getArtistList()) {
+            items.add(new OverlayItem(a.getArtistes(),
+                    a.getOrigine_pays1(),
+                    new GeoPoint(a.getGeo_point_2d_x(),a.getGeo_point_2d_y())));
+        }
     }
 
 }

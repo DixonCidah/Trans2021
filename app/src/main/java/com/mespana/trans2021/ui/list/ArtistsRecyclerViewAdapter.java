@@ -36,44 +36,9 @@ public class ArtistsRecyclerViewAdapter  extends RecyclerView.Adapter<ArtistsRec
         return new ViewHolder(view);
     }
     
-    // TODO : unbind en remettant la photo template sinon la prochaine n'aura pas le template
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        final Artist artist = artistList.get(position);
-        holder.binding.title.setText(artist.getArtistes());
-        if(artist.getOrigine_pays1().equals("")){
-            holder.binding.secondaryText.setVisibility(View.GONE);
-        }else{
-            holder.binding.secondaryText.setVisibility(View.VISIBLE);
-            holder.binding.secondaryText.setText(artist.getOrigine_pays1());
-        }
-        if(artist.getOrigine_ville1().equals("")){
-            holder.binding.supportingText.setVisibility(View.GONE);
-        }
-        else {
-            holder.binding.supportingText.setVisibility(View.VISIBLE);
-            holder.binding.supportingText.setText(artist.getOrigine_ville1());
-        }
-        SpotifyService.getPictureFromSpotifyAlbumId(artist.getSpotify(),
-                new ImageHandler() {
-                    @Override
-                    public void onSuccess(Bitmap bitmap) {
-                        activity.runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                holder.binding.cover.setImageBitmap(bitmap);
-                            }
-                        });
-                    }
-                }
-        );
-
-        holder.binding.card.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                // lancer le fragment de détail d'artiste
-            }
-        });
+        holder.bind(artistList.get(position));
     }
 
     @Override
@@ -88,6 +53,45 @@ public class ArtistsRecyclerViewAdapter  extends RecyclerView.Adapter<ArtistsRec
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         final FragmentListItemBinding binding;
+
+        public void bind(Artist artist){
+            binding.cover.setImageResource(R.drawable.transmusicales_template_image);
+            binding.title.setText(artist.getArtistes());
+            if(artist.getOrigine_pays1().equals("")){
+                binding.secondaryText.setVisibility(View.GONE);
+            }else{
+                binding.secondaryText.setVisibility(View.VISIBLE);
+                binding.secondaryText.setText(artist.getOrigine_pays1());
+            }
+            if(artist.getOrigine_ville1().equals("")){
+                binding.supportingText.setVisibility(View.GONE);
+            }
+            else {
+                binding.supportingText.setVisibility(View.VISIBLE);
+                binding.supportingText.setText(artist.getOrigine_ville1());
+            }
+            SpotifyService.getPictureFromSpotifyAlbumId(artist.getSpotify(),
+                    new ImageHandler() {
+                        @Override
+                        public void onSuccess(Bitmap bitmap) {
+                            activity.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    binding.cover.setImageBitmap(bitmap);
+                                }
+                            });
+                        }
+                    }
+            );
+
+            binding.card.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    // lancer le fragment de détail d'artiste
+                }
+            });
+        }
+
         public ViewHolder(View view) {
             super(view);
             binding = FragmentListItemBinding.bind(view);

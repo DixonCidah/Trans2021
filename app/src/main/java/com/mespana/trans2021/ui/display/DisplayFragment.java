@@ -4,23 +4,11 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
-import android.widget.Toast;
-
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-
 import com.mespana.trans2021.R;
 import com.mespana.trans2021.databinding.FragmentDisplayBinding;
-import com.mespana.trans2021.databinding.FragmentListBinding;
 import com.mespana.trans2021.models.Artist;
-import com.mespana.trans2021.services.JsonParsingService;
-import com.mespana.trans2021.ui.list.ArtistsRecyclerViewAdapter;
-import com.mespana.trans2021.ui.main.PageViewModel;
-import com.mespana.trans2021.ui.main.PlaceholderFragment;
 
 public class DisplayFragment extends Fragment {
 

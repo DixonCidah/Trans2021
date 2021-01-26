@@ -2,7 +2,6 @@ package com.mespana.trans2021.ui.main;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
 import com.mespana.trans2021.ui.list.ListFragment;
@@ -11,8 +10,8 @@ import com.mespana.trans2021.ui.search.SearchFragment;
 
 public class SectionsStateAdapter extends FragmentStateAdapter {
 
-    public SectionsStateAdapter(FragmentActivity fragmentActivity) {
-        super(fragmentActivity);
+    public SectionsStateAdapter(Fragment fragment) {
+        super(fragment);
     }
 
     @NonNull

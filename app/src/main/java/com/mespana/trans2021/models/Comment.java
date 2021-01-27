@@ -1,32 +1,45 @@
 package com.mespana.trans2021.models;
+import com.google.firebase.Timestamp;
+import com.google.firebase.firestore.DocumentSnapshot;
 
-import com.firebase.ui.auth.data.model.User;
+import java.util.Date;
 
-public class Comment {
+public class Comment{
 
-    private Artist artist;
-    private User user;
+    private String username;
+    private String userPhotoUrl;
     private String comment;
+    private Date date;
 
-    public Comment(Artist artist, User user) {
-        this.artist = artist;
-        this.user = user;
+    public Comment(DocumentSnapshot documentSnapshot) {
+        this(documentSnapshot.getString("username"),
+                documentSnapshot.getString("userPhotoUrl"),
+                documentSnapshot.getString("comment"),
+                documentSnapshot.getDate("date"));
     }
 
-    public Artist getArtist() {
-        return artist;
+    public Comment(String username, String userPhotoUrl, String comment, Date date) {
+        this.username = username;
+        this.userPhotoUrl = userPhotoUrl;
+        this.comment = comment;
+        this.date = date;
     }
 
-    public void setArtist(Artist artist) {
-        this.artist = artist;
+
+    public String getUsername() {
+        return username;
     }
 
-    public User getUser() {
-        return user;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public String getUserPhotoUrl() {
+        return userPhotoUrl;
+    }
+
+    public void setUserPhotoUrl(String userPhotoUrl) {
+        this.userPhotoUrl = userPhotoUrl;
     }
 
     public String getComment() {
@@ -35,5 +48,13 @@ public class Comment {
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
     }
 }

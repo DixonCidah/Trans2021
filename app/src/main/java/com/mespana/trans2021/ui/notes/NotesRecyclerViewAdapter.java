@@ -4,20 +4,20 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.Query;
 import com.mespana.trans2021.R;
 import com.mespana.trans2021.databinding.FragmentNotesItemBinding;
 import com.mespana.trans2021.models.Note;
-
-import java.util.List;
+import com.mespana.trans2021.ui.FirestoreRecyclerViewAdapter;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-public class NotesRecyclerViewAdapter extends RecyclerView.Adapter<NotesRecyclerViewAdapter.ViewHolderNote> {
-    private List<Note> noteList;
+public class NotesRecyclerViewAdapter extends FirestoreRecyclerViewAdapter<Note, NotesRecyclerViewAdapter.ViewHolderNote> {
 
-    public NotesRecyclerViewAdapter(List<Note> noteList) {
-        this.noteList = noteList;
+    public NotesRecyclerViewAdapter(Query query) {
+        super(query);
     }
 
     @NonNull
@@ -30,12 +30,13 @@ public class NotesRecyclerViewAdapter extends RecyclerView.Adapter<NotesRecycler
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolderNote holder, int position) {
-        holder.bind(noteList.get(position));
+        Note parsedNote = createParsedObjectFromDocumentSnapshots(position);
+        holder.bind(parsedNote);
     }
 
     @Override
-    public int getItemCount() {
-        return noteList.size();
+    protected Note createParsedObject(DocumentSnapshot documentSnapshot) {
+        return new Note(documentSnapshot);
     }
 
     public class ViewHolderNote extends RecyclerView.ViewHolder {
@@ -46,9 +47,7 @@ public class NotesRecyclerViewAdapter extends RecyclerView.Adapter<NotesRecycler
         }
 
         public void bind(Note note){
-            if(note.getUser() != null){
-                //binding.username.setText(note.getUser().getName());
-            }
+            binding.username.setText(note.getUsername());
             binding.comment.setText(note.getComment());
         }
     }

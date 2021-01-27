@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.mespana.trans2021.R;
 import com.mespana.trans2021.databinding.FragmentNotesBinding;
 import com.mespana.trans2021.models.Artist;
@@ -22,22 +24,27 @@ import androidx.fragment.app.Fragment;
 public class NotesFragment extends Fragment {
 
     FragmentNotesBinding binding;
-    List<Note> notes;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
-            Bundle savedInstanceState) {
+                             Bundle savedInstanceState) {
         SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
         String recordId = sharedPref.getString(getActivity().getString(R.string.shared_prefs_artist_rec_id), getActivity().getString(R.string.unknown_artists));
         Artist artist = JsonParsingService.getArtistFromRecordId(recordId);
-        this.notes = FirebaseService.getNotesFromArtist(artist);
         this.binding = FragmentNotesBinding.inflate(inflater, container, false);
-        this.binding.recyclerView.setAdapter(new NotesRecyclerViewAdapter(notes));
-        /*binding.confirmButton.setOnClickListener(view -> {
+        this.binding.recyclerView.setAdapter(new NotesRecyclerViewAdapter(FirebaseService.getNotesFromArtist(artist)));
+        binding.confirmButton.setOnClickListener(view -> {
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-            FirebaseService.postNoteOfArtist(artist, user,
-                    new Note(binding.slider.getValue(), artist, user, binding.filledTextField.getEditText().getText().toString());
-        });*/
+            if(user != null){
+                Note note = new Note((int) binding.slider.getValue(),
+                        user.getProviderId(),
+                        user.getDisplayName(),
+                        "",// todo add user.getPhotoUrl()
+                        binding.filledTextField.getEditText().getText().toString(),
+                        artist.getRecordid());
+                FirebaseService.postNote(note);
+            }
+        });
         return binding.getRoot();
     }
 }

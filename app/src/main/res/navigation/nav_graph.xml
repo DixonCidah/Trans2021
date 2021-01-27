@@ -21,5 +21,12 @@
         <action
             android:id="@+id/action_displayFragment_to_tabsFragment"
             app:destination="@id/tabsFragment" />
+        <action
+            android:id="@+id/action_displayFragment_to_notesFragment"
+            app:destination="@id/notesFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/notesFragment"
+        android:name="com.mespana.trans2021.ui.notes.NotesFragment"
+        android:label="NotesFragment" />
 </navigation>

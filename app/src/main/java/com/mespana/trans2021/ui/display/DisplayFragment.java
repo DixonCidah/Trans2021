@@ -18,6 +18,7 @@ import com.mespana.trans2021.R;
 import com.mespana.trans2021.databinding.FragmentDisplayBinding;
 import com.mespana.trans2021.models.Artist;
 import com.mespana.trans2021.services.JsonParsingService;
+import com.mespana.trans2021.services.SpotifyService;
 
 public class DisplayFragment extends Fragment {
 
@@ -41,6 +42,7 @@ public class DisplayFragment extends Fragment {
             Toast.makeText(getContext(), "L'artiste n'existe pas", Toast.LENGTH_SHORT).show();
             Navigation.findNavController(getView()).navigate(R.id.action_displayFragment_to_tabsFragment);
         }
+        binding.textviewNotes.setOnClickListener(view -> Navigation.findNavController(view).navigate(R.id.action_displayFragment_to_notesFragment));
         binding.edition.setText(artist.getEdition());
         binding.listView.setAdapter(new PastEditionsListAdapter(artist.getEventList()));
         binding.artists.setText(artist.getArtistes());
@@ -85,8 +87,13 @@ public class DisplayFragment extends Fragment {
         // si pas d'image récupérée, on met l'image de base (ic_profile)
         //binding.roundedImage.setImageDrawable();
         if(artist.isTriedToLoadImage()) binding.image.setImageBitmap(artist.getLoadedImage());
-        // TODO else try loading image
-        //else
+        if (artist.getLoadedImage() != null){
+            binding.image.setImageBitmap(artist.getLoadedImage());
+        }else{
+            SpotifyService.getPictureFromSpotifyAlbumId(artist,
+                    bitmap -> getActivity().runOnUiThread(() -> binding.image.setImageBitmap(bitmap))
+            );
+        }
 
         View root = binding.getRoot();
         return root;

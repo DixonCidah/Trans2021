@@ -16,6 +16,7 @@
     <string name="ok">Ok</string>
     <string name="shared_prefs_artist_rec_id">KEY_ID_ARTIST</string>
     <string name="rate">Noter</string>
-    <string name="comment">Commenter</string>
+    <string name="comments">Commentaires</string>
     <string name="past_dates">Dates précédentes</string>
+    <string name="insert_your_comment">Entrez votre commentaire</string>
 </resources>

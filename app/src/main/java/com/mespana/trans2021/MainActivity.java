@@ -34,15 +34,12 @@ public class MainActivity extends AppCompatActivity {
         JsonParsingService.parseJson(this);
         setContentView(binding.getRoot());
         binding.account.setText(R.string.signin);
-        binding.account.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (FirebaseAuth.getInstance().getCurrentUser() == null) {
-                    signIn();
-                }
-                else{
-                    signOut();
-                }
+        binding.account.setOnClickListener(view -> {
+            if (FirebaseAuth.getInstance().getCurrentUser() == null) {
+                signIn();
+            }
+            else{
+                signOut();
             }
         });
     }
@@ -66,7 +63,11 @@ public class MainActivity extends AppCompatActivity {
 
     private void signIn() {
         List<AuthUI.IdpConfig> providers = Arrays.asList(new AuthUI.IdpConfig.EmailBuilder().build());
-                //new AuthUI.IdpConfig.GoogleBuilder().build());
+        /*
+            TODO generer un clé https://developers.google.com/android/guides/client-auth pour que
+            l'authentification Google fonctionne
+            new AuthUI.IdpConfig.GoogleBuilder().build());
+         */
         startActivityForResult(
                 AuthUI.getInstance()
                         .createSignInIntentBuilder()

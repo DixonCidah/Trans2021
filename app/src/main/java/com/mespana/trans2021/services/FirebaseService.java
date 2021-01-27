@@ -10,11 +10,11 @@ public class FirebaseService {
 
    public static Query getCommentsFromArtist(Artist artist) {
       FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-      return firestore.collection("comments").whereEqualTo("recordId",artist.getRecordid());
+      return firestore.collection("comments"+artist.getRecordid()).orderBy("date", Query.Direction.DESCENDING);
    }
 
    public static void postComment(Comment comment){
       FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-      firestore.collection("comments").add(comment);
+      firestore.collection("comments"+comment.getRecordId()).add(comment);
    }
 }

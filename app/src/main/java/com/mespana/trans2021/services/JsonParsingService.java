@@ -43,8 +43,8 @@ public class JsonParsingService {
         }
     }
 
-    public static Optional<Artist> getArtistFromRecordId(String recordId){
-        return artistList.stream().filter(artist -> artist.getRecordid().equals(recordId)).findAny();
+    public static Artist getArtistFromRecordId(String recordId){
+        return (artistList.stream().filter(artist -> artist.getRecordid().equals(recordId)).findAny()).get();
     }
 
     public static List<Artist> getArtistList(){

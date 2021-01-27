@@ -13,4 +13,28 @@ public class Event {
         this.salle = salle;
         this.date = date;
     }
+
+    public Integer getNbOfEvent() {
+        return nbOfEvent;
+    }
+
+    public void setNbOfEvent(Integer nbOfEvent) {
+        this.nbOfEvent = nbOfEvent;
+    }
+
+    public String getSalle() {
+        return salle;
+    }
+
+    public void setSalle(String salle) {
+        this.salle = salle;
+    }
+
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
 }

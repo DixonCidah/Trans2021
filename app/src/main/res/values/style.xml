@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="cyan">#FF03A9F4</color>
+    <color name="purple_c">#FFBB86FC</color>
+    <color name="blue_c">#FF0055FF</color>
+    <style name="MonthPickerDialogStyle" >
+        <item name="monthBgColor">@color/purple_c</item>
+        <item name="monthBgSelectedColor">#0055FF</item>
+        <item name="monthFontColorSelected">@color/black</item>
+        <item name="monthFontColorNormal">@color/white</item>
+        <item name="monthFontColorDisabled">@color/white</item>
+
+        <item name="headerBgColor">@color/black</item>
+        <item name="headerFontColorSelected">@color/blue_c</item>
+        <item name="headerFontColorNormal">@color/gray</item>
+        <item name="headerTitleColor">@color/white</item>
+        <item name="dialogActionButtonColor">@color/black</item>
+    </style>
+</resources>

@@ -1,16 +1,21 @@
 package com.mespana.trans2021.ui.display;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.RatingBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
@@ -42,7 +47,8 @@ public class DisplayFragment extends Fragment {
             Toast.makeText(getContext(), "L'artiste n'existe pas", Toast.LENGTH_SHORT).show();
             Navigation.findNavController(getView()).navigate(R.id.action_displayFragment_to_tabsFragment);
         }
-        binding.textviewNotes.setOnClickListener(view -> Navigation.findNavController(view).navigate(R.id.action_displayFragment_to_notesFragment));
+        binding.rating.setRating(4.5f); // TODO properly
+        binding.comments.setOnClickListener(view -> Navigation.findNavController(view).navigate(R.id.action_displayFragment_to_notesFragment));
         binding.edition.setText(artist.getEdition());
         binding.listView.setAdapter(new PastEditionsListAdapter(artist.getEventList()));
         binding.artists.setText(artist.getArtistes());
@@ -94,8 +100,50 @@ public class DisplayFragment extends Fragment {
                     bitmap -> getActivity().runOnUiThread(() -> binding.image.setImageBitmap(bitmap))
             );
         }
-
+        binding.rate.setOnClickListener(view -> showDialog());
         View root = binding.getRoot();
         return root;
+    }
+
+    private void showDialog() {
+        Context context = getContext();
+        final AlertDialog.Builder popDialog = new AlertDialog.Builder(context);
+        LinearLayout linearLayout = new LinearLayout(context);
+        final RatingBar rating = new RatingBar(context);
+
+        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT
+        );
+
+        linearLayout.setGravity(Gravity.CENTER_HORIZONTAL);
+
+        rating.setLayoutParams(lp);
+        rating.setNumStars(5);
+        rating.setStepSize(1);
+
+        //add ratingBar to linearLayout
+        linearLayout.addView(rating);
+
+        popDialog.setIcon(R.drawable.ic_star);
+        popDialog.setTitle("Add Rating: ");
+
+        //add linearLayout to dailog
+        popDialog.setView(linearLayout);
+
+        rating.setOnRatingBarChangeListener((ratingBar, v, b) -> System.out.println("Rated val:"+v));
+
+        // Button OK
+        popDialog.setPositiveButton(android.R.string.ok,
+                (dialog, which) -> {
+                    // TODO add rating to the database
+                    dialog.dismiss();
+                })
+                // Button Cancel
+                .setNegativeButton("Cancel",
+                        (dialog, id) -> dialog.cancel());
+
+        popDialog.create();
+        popDialog.show();
     }
 }

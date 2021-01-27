@@ -1,7 +1,10 @@
 package com.mespana.trans2021.ui.list;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +19,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
+import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class ArtistsRecyclerViewAdapter  extends RecyclerView.Adapter<ArtistsRecyclerViewAdapter.ViewHolder> {
@@ -55,6 +60,14 @@ public class ArtistsRecyclerViewAdapter  extends RecyclerView.Adapter<ArtistsRec
         final FragmentListItemBinding binding;
 
         public void bind(Artist artist){
+            binding.card.setOnClickListener(view -> {
+                Context context = view.getContext();
+                SharedPreferences sharedPref = ((Activity)context).getPreferences(Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPref.edit();
+                editor.putString(context.getString(R.string.shared_prefs_artist_rec_id), artist.getRecordid());
+                editor.apply();
+                Navigation.findNavController(view).navigate(R.id.action_tabsFragment_to_displayFragment);
+            });
             binding.cover.setImageResource(R.drawable.transmusicales_template_image);
             binding.title.setText(artist.getArtistes());
             if(artist.getOrigine_pays1().equals("")){
@@ -89,13 +102,6 @@ public class ArtistsRecyclerViewAdapter  extends RecyclerView.Adapter<ArtistsRec
             }else {
                 binding.cover.setImageBitmap(artist.getLoadedImage());
             }
-
-            binding.card.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    // lancer le fragment de détail d'artiste
-                }
-            });
         }
 
         public ViewHolder(View view) {

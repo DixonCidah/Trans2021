@@ -15,4 +15,5 @@
     <string name="cancel">Annuler</string>
     <string name="ok">Ok</string>
     <string name="shared_prefs_artist_rec_id">KEY_ID_ARTIST</string>
+    <string name="insert_your_comment">Entrez votre commentaire</string>
 </resources>

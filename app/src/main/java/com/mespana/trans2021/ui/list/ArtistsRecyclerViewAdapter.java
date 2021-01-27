@@ -86,17 +86,12 @@ public class ArtistsRecyclerViewAdapter  extends RecyclerView.Adapter<ArtistsRec
             if (artist.getLoadedImage() == null) {
                 if(!artist.isTriedToLoadImage()) {
                     SpotifyService.getPictureFromSpotifyAlbumId(artist,
-                            new ImageHandler() {
+                            bitmap -> activity.runOnUiThread(new Runnable() {
                                 @Override
-                                public void onSuccess(Bitmap bitmap) {
-                                    activity.runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            binding.cover.setImageBitmap(bitmap);
-                                        }
-                                    });
+                                public void run() {
+                                    binding.cover.setImageBitmap(bitmap);
                                 }
-                            }
+                            })
                     );
                 }
             }else {

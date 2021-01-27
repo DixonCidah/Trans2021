@@ -20,6 +20,7 @@ import com.mespana.trans2021.R;
 import com.mespana.trans2021.databinding.FragmentDisplayBinding;
 import com.mespana.trans2021.models.Artist;
 import com.mespana.trans2021.services.JsonParsingService;
+import com.mespana.trans2021.services.SpotifyService;
 
 import java.util.Optional;
 
@@ -46,6 +47,7 @@ public class DisplayFragment extends Fragment {
             binding.country.setText(artist.getOrigine_pays1());
             binding.city.setText(artist.getOrigine_ville1());
             binding.back.setOnClickListener(view -> Navigation.findNavController(view).navigate(R.id.action_displayFragment_to_tabsFragment));
+            binding.textviewNotes.setOnClickListener(view -> Navigation.findNavController(view).navigate(R.id.action_displayFragment_to_notesFragment));
             String deezer = artist.getDeezer();
             if(deezer == null) {
                 binding.deezer.setVisibility(View.GONE);
@@ -54,7 +56,6 @@ public class DisplayFragment extends Fragment {
                     // TODO lance le profil Deezer
                 });
             }
-
             String spotify = artist.getSpotify();
             if(spotify == null) {
                 binding.spotify.setVisibility(View.GONE);
@@ -68,8 +69,15 @@ public class DisplayFragment extends Fragment {
                 });
             }
             // si pas d'image récupérée, on met l'image de base (ic_profile)
-            //binding.roundedImage.setImageDrawable();
-            binding.roundedImage.setImageDrawable(getContext().getDrawable(R.drawable.samm_henshaw));
+            if (artist.getLoadedImage() != null){
+                binding.roundedImage.setImageBitmap(artist.getLoadedImage());
+            }else{
+                SpotifyService.getPictureFromSpotifyAlbumId(artist,
+                        bitmap -> getActivity().runOnUiThread(() -> binding.roundedImage.setImageBitmap(bitmap))
+                );
+            }
+
+
         } else {
             Toast.makeText(getContext(), "L'artiste n'existe pas", Toast.LENGTH_SHORT).show();
             Navigation.findNavController(getView()).navigate(R.id.action_displayFragment_to_tabsFragment);

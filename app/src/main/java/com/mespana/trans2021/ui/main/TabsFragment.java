@@ -32,7 +32,6 @@ public class TabsFragment extends Fragment {
         binding = FragmentTabsBinding.inflate(inflater, container, false);
         SectionsStateAdapter sectionsStateAdapter = new SectionsStateAdapter(this);
         binding.viewPager.setAdapter(sectionsStateAdapter);
-        binding.viewPager.setUserInputEnabled(false);
         new TabLayoutMediator(binding.tabs, binding.viewPager,
                 (tab, position) -> tab.setText(getResources().getString(TAB_TITLES[position]))
         ).attach();

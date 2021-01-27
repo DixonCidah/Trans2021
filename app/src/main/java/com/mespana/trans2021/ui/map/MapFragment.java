@@ -67,6 +67,13 @@ public class MapFragment extends Fragment {
     public void onResume() {
         super.onResume();
         loadMap();
+        ((ViewPager2)getParentFragment().getView().findViewById(R.id.view_pager)).setUserInputEnabled(false);
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        ((ViewPager2)getParentFragment().getView().findViewById(R.id.view_pager)).setUserInputEnabled(true);
     }
 
     private void loadMap() {

@@ -1,4 +1,4 @@
-package com.mespana.trans2021.ui;
+package com.mespana.trans2021.ui.comment;
 
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentSnapshot;

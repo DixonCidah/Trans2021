@@ -9,7 +9,6 @@ import com.google.firebase.firestore.Query;
 import com.mespana.trans2021.R;
 import com.mespana.trans2021.databinding.FragmentCommentsItemBinding;
 import com.mespana.trans2021.models.Comment;
-import com.mespana.trans2021.ui.FirestoreRecyclerViewAdapter;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;

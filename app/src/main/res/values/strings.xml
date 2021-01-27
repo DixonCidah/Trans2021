@@ -9,5 +9,10 @@
     <string name="community_s_thoughts">Avis de la communauté</string>
     <string name="unknown_artists">Artistes inconnus</string>
     <string name="edition">Edition</string>
+    <string name="signin">Se connecter</string>
+    <string name="signout_dialog_title">Déconnexion</string>
+    <string name="signout_dialog_message">Êtes-vous sûr ?</string>
+    <string name="cancel">Annuler</string>
+    <string name="ok">Ok</string>
     <string name="shared_prefs_artist_rec_id">KEY_ID_ARTIST</string>
 </resources>

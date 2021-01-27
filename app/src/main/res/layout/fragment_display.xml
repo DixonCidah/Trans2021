@@ -64,7 +64,7 @@
             <View
                 android:layout_width="26dp"
                 android:layout_height="26dp"
-                android:background="@drawable/ic_list"
+                android:background="@drawable/ic_calendar"
                 android:layout_marginRight="10dp"/>
             <TextView
                 android:layout_width="wrap_content"
@@ -89,7 +89,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="JJ-mm-AA"
+                android:text="JJ-mmm-AA"
                 android:textSize="18sp"
                 android:layout_weight="1"/>
             <TextView

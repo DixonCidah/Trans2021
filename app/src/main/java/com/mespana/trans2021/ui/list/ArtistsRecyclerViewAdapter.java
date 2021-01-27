@@ -70,19 +70,25 @@ public class ArtistsRecyclerViewAdapter  extends RecyclerView.Adapter<ArtistsRec
                 binding.supportingText.setVisibility(View.VISIBLE);
                 binding.supportingText.setText(artist.getOrigine_ville1());
             }
-            SpotifyService.getPictureFromSpotifyAlbumId(artist.getSpotify(),
-                    new ImageHandler() {
-                        @Override
-                        public void onSuccess(Bitmap bitmap) {
-                            activity.runOnUiThread(new Runnable() {
+            if (artist.getLoadedImage() == null) {
+                if(!artist.isTriedToLoadImage()) {
+                    SpotifyService.getPictureFromSpotifyAlbumId(artist,
+                            new ImageHandler() {
                                 @Override
-                                public void run() {
-                                    binding.cover.setImageBitmap(bitmap);
+                                public void onSuccess(Bitmap bitmap) {
+                                    activity.runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            binding.cover.setImageBitmap(bitmap);
+                                        }
+                                    });
                                 }
-                            });
-                        }
-                    }
-            );
+                            }
+                    );
+                }
+            }else {
+                binding.cover.setImageBitmap(artist.getLoadedImage());
+            }
 
             binding.card.setOnClickListener(new View.OnClickListener() {
                 @Override

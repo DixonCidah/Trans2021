@@ -3,6 +3,7 @@ package com.mespana.trans2021.services;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import com.mespana.trans2021.models.Artist;
 import com.mespana.trans2021.services.handlers.ImageHandler;
 
 import org.jetbrains.annotations.NotNull;
@@ -21,11 +22,12 @@ public class SpotifyService {
 
    static OkHttpClient client = new OkHttpClient();
 
-   public static void getPictureFromSpotifyAlbumId(String idSpotify, ImageHandler imageHandler){
+   public static void getPictureFromSpotifyAlbumId(Artist artist, ImageHandler imageHandler){
       // todo change to android sdk
       Request request = new Request.Builder()
-              .url("https://open.spotify.com/oembed?url="+idSpotify)
+              .url("https://open.spotify.com/oembed?url="+artist.getSpotify())
               .build();
+      artist.setTriedToLoadImage(true);
       client.newCall(request).enqueue(new Callback() {
          @Override
          public void onResponse(Call call, Response response) throws IOException {
@@ -42,6 +44,7 @@ public class SpotifyService {
                         public void onResponse(@NotNull Call call, @NotNull Response responseImage) throws IOException {
                            if (response.isSuccessful()) {
                               Bitmap bitmap = BitmapFactory.decodeStream(responseImage.body().byteStream());
+                              artist.setLoadedImage(bitmap);
                               imageHandler.onSuccess(bitmap);
                            }
                         }

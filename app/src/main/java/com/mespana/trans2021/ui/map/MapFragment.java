@@ -4,24 +4,18 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.Navigation;
-import androidx.viewpager2.widget.ViewPager2;
 
 import com.mespana.trans2021.BuildConfig;
 import com.mespana.trans2021.R;
 import com.mespana.trans2021.databinding.FragmentMapBinding;
 import com.mespana.trans2021.models.Artist;
 import com.mespana.trans2021.services.JsonParsingService;
-import com.mespana.trans2021.ui.display.DisplayFragment;
-import com.mespana.trans2021.ui.main.TabsFragment;
 
 import org.jetbrains.annotations.NotNull;
 import org.osmdroid.api.IMapController;
@@ -39,7 +33,6 @@ import org.osmdroid.views.overlay.OverlayItem;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class MapFragment extends Fragment {
     private List<OverlayItem> items;
@@ -67,19 +60,17 @@ public class MapFragment extends Fragment {
     public void onResume() {
         super.onResume();
         loadMap();
-        //((ViewPager2)getParentFragment().getView().findViewById(R.id.view_pager)).setUserInputEnabled(false);
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        //((ViewPager2)getParentFragment().getView().findViewById(R.id.view_pager)).setUserInputEnabled(true);
     }
 
     private void loadMap() {
         MapView map = binding.mapView;
 
-        MapTileProviderBasic tileProvider = new MapTileProviderBasic(getContext().getApplicationContext(), TileSourceFactory.MAPNIK);
+        MapTileProviderBasic tileProvider = new MapTileProviderBasic(requireContext().getApplicationContext(), TileSourceFactory.MAPNIK);
         SimpleInvalidationHandler mTileRequestCompleteHandler = new SimpleInvalidationHandler(binding.mapView);
         tileProvider.setTileRequestCompleteHandler(mTileRequestCompleteHandler);
         map.setTileProvider(tileProvider);
@@ -105,7 +96,7 @@ public class MapFragment extends Fragment {
         SharedPreferences.Editor editor = sharedPref.edit();
         editor.putString(getResources().getString(R.string.shared_prefs_artist_rec_id), item.getTitle());
         editor.apply();
-        Navigation.findNavController(getView()).navigate(R.id.action_tabsFragment_to_displayFragment);
+        Navigation.findNavController(requireActivity(), R.id.nav_host_fragment).navigate(R.id.displayFragment);
     }
 
     private void putMarkers(MapView map) {

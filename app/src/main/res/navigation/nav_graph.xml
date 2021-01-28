@@ -27,6 +27,6 @@
     </fragment>
     <fragment
         android:id="@+id/notesFragment"
-        android:name="com.mespana.trans2021.ui.notes.NotesFragment"
+        android:name="com.mespana.trans2021.ui.comment.CommentsFragment"
         android:label="NotesFragment" />
 </navigation>

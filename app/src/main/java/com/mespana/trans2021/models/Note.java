@@ -1,22 +1,24 @@
 package com.mespana.trans2021.models;
 
-import com.firebase.ui.auth.data.model.User;
+
+import com.google.firebase.firestore.DocumentSnapshot;
 
 public class Note {
 
     private Integer stars;
-    private Artist artist;
-    private User user;
-    private String comment;
+    private String userId;
+    private String recordId;
 
-    public Note(Integer stars, Artist artist, User user, String comment) {
-        this.stars = stars;
-        this.artist = artist;
-        this.user = user;
+    public Note(DocumentSnapshot documentSnapshot){
+        this(documentSnapshot.getLong("stars").intValue(),
+                documentSnapshot.getString("userId"),
+                documentSnapshot.getString("recordId"));
     }
 
-    public Note(String comment) {
-        this.comment = comment;
+    public Note(Integer stars, String userId ,String recordId) {
+        this.stars = stars;
+        this.userId = userId;
+        this.recordId = recordId;
     }
 
     public Integer getStars() {
@@ -27,27 +29,19 @@ public class Note {
         this.stars = stars;
     }
 
-    public Artist getArtist() {
-        return artist;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setArtist(Artist artist) {
-        this.artist = artist;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
-    public User getUser() {
-        return user;
+    public String getRecordId() {
+        return recordId;
     }
 
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public String getComment() {
-        return comment;
-    }
-
-    public void setComment(String comment) {
-        this.comment = comment;
+    public void setRecordId(String recordId) {
+        this.recordId = recordId;
     }
 }

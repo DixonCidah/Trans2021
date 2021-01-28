@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
         .show();*/
     }
 
-    private void signIn() {
+    public void signIn() {
         List<AuthUI.IdpConfig> providers = Arrays.asList(new AuthUI.IdpConfig.EmailBuilder().build());
         /*
             TODO generer un clé https://developers.google.com/android/guides/client-auth pour que
@@ -108,5 +108,16 @@ public class MainActivity extends AppCompatActivity {
                 // ...
             }
         }*/
+    }
+
+    public void needsToSignIn() {
+        new MaterialAlertDialogBuilder(this)
+                .setTitle(getResources().getString(R.string.require_connextion_dialog_title))
+                .setMessage(getResources().getString(R.string.require_connextion_dialog_message))
+                .setPositiveButton(R.string.ok, (dialogInterface, i) -> {
+                    signIn();
+                })
+                .setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
+                }).show();
     }
 }

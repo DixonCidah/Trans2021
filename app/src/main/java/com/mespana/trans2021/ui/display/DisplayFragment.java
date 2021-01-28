@@ -14,19 +14,35 @@ import android.widget.RatingBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import com.firebase.ui.auth.AuthUI;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentChange;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
+import com.mespana.trans2021.MainActivity;
 import com.mespana.trans2021.R;
 import com.mespana.trans2021.databinding.FragmentDisplayBinding;
 import com.mespana.trans2021.models.Artist;
+import com.mespana.trans2021.models.Note;
+import com.mespana.trans2021.services.FirebaseService;
 import com.mespana.trans2021.services.JsonParsingService;
 import com.mespana.trans2021.services.SpotifyService;
 
-public class DisplayFragment extends Fragment {
+import java.util.ArrayList;
+
+public class DisplayFragment extends Fragment implements EventListener<QuerySnapshot> {
 
     FragmentDisplayBinding binding;
+    String recordId;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -39,15 +55,15 @@ public class DisplayFragment extends Fragment {
             Bundle savedInstanceState) {
         SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
         Context context = getContext();
-        String recordId = sharedPref.getString(context.getString(R.string.shared_prefs_artist_rec_id), context.getString(R.string.unknown_artists));
+        recordId = sharedPref.getString(context.getString(R.string.shared_prefs_artist_rec_id), context.getString(R.string.unknown_artists));
         Artist artist = JsonParsingService.getArtistFromRecordId(recordId);
         binding = FragmentDisplayBinding.inflate(inflater, container, false);
         if(artist == null) {
             Toast.makeText(getContext(), R.string.artist_does_not_exist, Toast.LENGTH_SHORT).show();
             Navigation.findNavController(getView()).navigate(R.id.action_displayFragment_to_tabsFragment);
         }
-        binding.rating.setRating(4.5f); // TODO properly
         binding.comments.setOnClickListener(view -> Navigation.findNavController(view).navigate(R.id.action_displayFragment_to_commentsFragment));
+        FirebaseService.getAverageNoteOfArtist(recordId).addSnapshotListener(this);
         binding.edition.setText(artist.getEdition());
         binding.listView.setAdapter(new PastEditionsListAdapter(artist.getEventList()));
         binding.artists.setText(artist.getArtistes());
@@ -105,44 +121,79 @@ public class DisplayFragment extends Fragment {
     }
 
     private void showDialog() {
-        Context context = getContext();
-        final AlertDialog.Builder popDialog = new AlertDialog.Builder(context);
-        LinearLayout linearLayout = new LinearLayout(context);
-        final RatingBar rating = new RatingBar(context);
+        FirebaseUser firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (firebaseUser != null){
+            Context context = getContext();
+            final AlertDialog.Builder popDialog = new AlertDialog.Builder(context);
+            LinearLayout linearLayout = new LinearLayout(context);
+            final RatingBar rating = new RatingBar(context);
 
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-        );
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+            );
 
-        linearLayout.setGravity(Gravity.CENTER_HORIZONTAL);
+            linearLayout.setGravity(Gravity.CENTER_HORIZONTAL);
 
-        rating.setLayoutParams(lp);
-        rating.setNumStars(5);
-        rating.setStepSize(1);
+            rating.setLayoutParams(lp);
+            rating.setNumStars(5);
+            rating.setStepSize(1);
 
-        //add ratingBar to linearLayout
-        linearLayout.addView(rating);
+            //add ratingBar to linearLayout
+            linearLayout.addView(rating);
 
-        popDialog.setIcon(R.drawable.ic_star);
-        popDialog.setTitle(R.string.your_rate);
+            popDialog.setIcon(R.drawable.ic_star);
+            popDialog.setTitle(R.string.your_rate);
 
-        //add linearLayout to dailog
-        popDialog.setView(linearLayout);
+            //add linearLayout to dailog
+            popDialog.setView(linearLayout);
 
-        rating.setOnRatingBarChangeListener((ratingBar, v, b) -> System.out.println("Rated val:"+v));
+            rating.setOnRatingBarChangeListener((ratingBar, v, b) -> System.out.println("Rated val:"+v));
 
-        // Button OK
-        popDialog.setPositiveButton(android.R.string.ok,
-                (dialog, which) -> {
-                    // TODO add rating to the database
-                    dialog.dismiss();
-                })
-                // Button Cancel
-                .setNegativeButton("Cancel",
-                        (dialog, id) -> dialog.cancel());
+            // Button OK
+            popDialog.setPositiveButton(android.R.string.ok,
+                    (dialog, which) -> {
+                        FirebaseService.postNoteOfArtist(new Note((int)rating.getRating(), firebaseUser.getUid(), recordId));
+                        dialog.dismiss();
+                    })
+                    // Button Cancel
+                    .setNegativeButton("Cancel",
+                            (dialog, id) -> dialog.cancel());
 
-        popDialog.create();
-        popDialog.show();
+            popDialog.create();
+            popDialog.show();
+        } else {
+            ((MainActivity)this.getActivity()).needsToSignIn();
+        }
+    }
+
+    private ArrayList<DocumentSnapshot> documentSnapshots = new ArrayList<>();
+
+    @Override
+    public void onEvent(@Nullable QuerySnapshot value, @Nullable FirebaseFirestoreException error) {
+        // pas clean mais firestore ne permet pas de faire un Query aggrégé AVG
+        for (DocumentChange change : value.getDocumentChanges()) {
+            switch (change.getType()) {
+                case ADDED:
+                    documentSnapshots.add(change.getNewIndex(), change.getDocument());
+                    break;
+                case MODIFIED:
+                    if (change.getOldIndex() == change.getNewIndex()) {
+                        documentSnapshots.set(change.getOldIndex(), change.getDocument());
+                    } else {
+                        documentSnapshots.remove(change.getOldIndex());
+                        documentSnapshots.add(change.getNewIndex(), change.getDocument());
+                    }
+                    break;
+                case REMOVED:
+                    documentSnapshots.remove(change.getOldIndex());
+                    break;
+            }
+        }
+        int total = 0;
+        for (DocumentSnapshot documentSnapshot : documentSnapshots){
+            total += documentSnapshot.getLong("stars");
+        }
+        binding.rating.setRating((float)total / documentSnapshots.size());
     }
 }

@@ -24,11 +24,13 @@
     <string name="url_spotify">https://open.spotify.com/</string>
     <string name="url_deezer">https://www.deezer.com/fr/album/</string>
     <string name="artist_does_not_exist">L\'artiste n\'existe pas</string>
-    <string name="your_rate">\"Votre note : \"</string>
     <string name="title_list">Liste</string>
     <string name="title_search">Recherche</string>
     <string name="title_map">Carte</string>
     <string name="title_profile">Profil</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="your_rate">Votre note :</string>
+    <string name="require_connextion_dialog_title">Connexion obligatoire</string>
+    <string name="require_connextion_dialog_message">Cette action requiert un compte, voulez-vous vous connecter ?</string>
 </resources>

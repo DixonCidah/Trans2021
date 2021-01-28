@@ -25,4 +25,10 @@
     <string name="url_deezer">https://www.deezer.com/fr/album/</string>
     <string name="artist_does_not_exist">L\'artiste n\'existe pas</string>
     <string name="your_rate">\"Votre note : \"</string>
+    <string name="title_list">Liste</string>
+    <string name="title_search">Recherche</string>
+    <string name="title_map">Carte</string>
+    <string name="title_profile">Profil</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

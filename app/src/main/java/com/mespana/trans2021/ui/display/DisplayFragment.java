@@ -47,7 +47,7 @@ public class DisplayFragment extends Fragment {
             Navigation.findNavController(getView()).navigate(R.id.action_displayFragment_to_tabsFragment);
         }
         binding.rating.setRating(4.5f); // TODO properly
-        binding.comments.setOnClickListener(view -> Navigation.findNavController(view).navigate(R.id.action_displayFragment_to_notesFragment));
+        binding.comments.setOnClickListener(view -> Navigation.findNavController(view).navigate(R.id.action_displayFragment_to_commentsFragment));
         binding.edition.setText(artist.getEdition());
         binding.listView.setAdapter(new PastEditionsListAdapter(artist.getEventList()));
         binding.artists.setText(artist.getArtistes());

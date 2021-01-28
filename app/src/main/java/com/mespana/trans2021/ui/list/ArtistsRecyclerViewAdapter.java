@@ -66,7 +66,7 @@ public class ArtistsRecyclerViewAdapter  extends RecyclerView.Adapter<ArtistsRec
                 SharedPreferences.Editor editor = sharedPref.edit();
                 editor.putString(context.getString(R.string.shared_prefs_artist_rec_id), artist.getRecordid());
                 editor.apply();
-                Navigation.findNavController(view).navigate(R.id.action_tabsFragment_to_displayFragment);
+                Navigation.findNavController(view).navigate(R.id.action_navigation_list_to_displayFragment);
             });
             binding.cover.setImageResource(R.drawable.transmusicales_template_image);
             binding.title.setText(artist.getArtistes());

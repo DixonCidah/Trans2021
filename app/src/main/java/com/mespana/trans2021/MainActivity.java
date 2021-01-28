@@ -7,6 +7,10 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.ui.AppBarConfiguration;
+import androidx.navigation.ui.NavigationUI;
 
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
@@ -23,7 +27,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    private static final int    RC_SIGN_IN = 35000,
+    private static final int RC_SIGN_IN = 35000,
             RC_SIGN_OUT = 35001;
     private ActivityMainBinding binding;
 
@@ -31,9 +35,16 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
+
         JsonParsingService.parseJson(this);
         setContentView(binding.getRoot());
-        binding.account.setText(R.string.signin);
+
+        // gestion bottom navigation
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        NavigationUI.setupWithNavController(binding.navView, navController);
+
+        // TODO rémi
+        /*binding.account.setText(R.string.signin);
         binding.account.setOnClickListener(view -> {
             if (FirebaseAuth.getInstance().getCurrentUser() == null) {
                 signIn();
@@ -41,11 +52,12 @@ public class MainActivity extends AppCompatActivity {
             else{
                 signOut();
             }
-        });
+        });*/
     }
 
     private void signOut() {
-        new MaterialAlertDialogBuilder(this)
+        // TODO rémi
+        /*new MaterialAlertDialogBuilder(this)
                 .setTitle(getResources().getString(R.string.signout_dialog_title))
                 .setMessage(getResources().getString(R.string.signout_dialog_message))
                 .setPositiveButton(R.string.ok, (dialogInterface, i) -> {
@@ -58,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
                 .setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
                 })
 
-        .show();
+        .show();*/
     }
 
     private void signIn() {
@@ -82,7 +94,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == RC_SIGN_IN) {
+        // TODO rémi
+        /*if (requestCode == RC_SIGN_IN) {
             IdpResponse response = IdpResponse.fromResultIntent(data);
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             if (resultCode == RESULT_OK && user != null) {
@@ -94,6 +107,6 @@ public class MainActivity extends AppCompatActivity {
                 // response.getError().getErrorCode() and handle the error.
                 // ...
             }
-        }
+        }*/
     }
 }

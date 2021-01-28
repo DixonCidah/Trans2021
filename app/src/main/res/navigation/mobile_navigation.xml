@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/navigation_list">
+
+    <fragment
+        android:id="@+id/navigation_list"
+        android:name="com.mespana.trans2021.ui.list.ListFragment"
+        tools:layout="@layout/fragment_list" >
+        <action
+            android:id="@+id/action_navigation_list_to_displayFragment"
+            app:destination="@id/displayFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_search"
+        android:name="com.mespana.trans2021.ui.search.SearchFragment"
+        tools:layout="@layout/fragment_search" >
+        <action
+            android:id="@+id/action_navigation_search_to_displayFragment"
+            app:destination="@id/displayFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/navigation_map"
+        android:name="com.mespana.trans2021.ui.map.MapFragment"
+        tools:layout="@layout/fragment_map" >
+        <action
+            android:id="@+id/action_navigation_map_to_displayFragment"
+            app:destination="@id/displayFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/displayFragment"
+        android:name="com.mespana.trans2021.ui.display.DisplayFragment"
+        android:label="fragment_display"
+        tools:layout="@layout/fragment_display" >
+        <action
+            android:id="@+id/action_displayFragment_to_commentsFragment"
+            app:destination="@id/commentsFragment" />
+        <action
+            android:id="@+id/action_displayFragment_pop"
+            app:popUpTo="@id/displayFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/commentsFragment"
+        tools:layout="@layout/fragment_comments"
+        android:name="com.mespana.trans2021.ui.comment.CommentsFragment"
+        android:label="CommentsFragment" >
+        <action
+            android:id="@+id/action_commentsFragment_pop"
+            app:popUpTo="@id/commentsFragment"
+            app:popUpToInclusive="true" />
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_profile"
+        android:name="com.mespana.trans2021.ui.profile.ProfileFragment"
+        android:label="fragment_profile"
+        tools:layout="@layout/fragment_profile" />
+</navigation>

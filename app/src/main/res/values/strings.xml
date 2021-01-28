@@ -19,4 +19,10 @@
     <string name="comments">Commentaires</string>
     <string name="past_dates">Dates précédentes</string>
     <string name="insert_your_comment">Entrez votre commentaire</string>
+    <string name="can_t_open_spotify">Vous n\'avez pas d\'application qui puisse permettre d\'ouvrir le profil Spotify.</string>
+    <string name="can_t_open_deezer">Vous n\'avez pas d\'application qui puisse permettre d\'ouvrir le profil Deezer.</string>
+    <string name="url_spotify">https://open.spotify.com/</string>
+    <string name="url_deezer">https://www.deezer.com/fr/album/</string>
+    <string name="artist_does_not_exist">L\'artiste n\'existe pas</string>
+    <string name="your_rate">\"Votre note : \"</string>
 </resources>

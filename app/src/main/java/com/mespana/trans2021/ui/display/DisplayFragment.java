@@ -1,7 +1,6 @@
 package com.mespana.trans2021.ui.display;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -44,7 +43,7 @@ public class DisplayFragment extends Fragment {
         Artist artist = JsonParsingService.getArtistFromRecordId(recordId);
         binding = FragmentDisplayBinding.inflate(inflater, container, false);
         if(artist == null) {
-            Toast.makeText(getContext(), "L'artiste n'existe pas", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getContext(), R.string.artist_does_not_exist, Toast.LENGTH_SHORT).show();
             Navigation.findNavController(getView()).navigate(R.id.action_displayFragment_to_tabsFragment);
         }
         binding.rating.setRating(4.5f); // TODO properly
@@ -57,36 +56,36 @@ public class DisplayFragment extends Fragment {
         if(ville == null || ville.isEmpty()) binding.city.setVisibility(View.GONE);
         else binding.city.setText(ville);
         String deezer = artist.getDeezer();
-        if(deezer.isEmpty() || deezer == null) {
+        if(deezer.isEmpty()) {
             binding.deezer.setVisibility(View.GONE);
         } else {
             binding.deezer.setOnClickListener(v -> {
                 try {
-                    String url = "https://www.deezer.com/fr/album/";
+                    String url = getString(R.string.url_deezer);
                     url+=deezer;
                     Intent i = new Intent(Intent.ACTION_VIEW);
                     i.setData(Uri.parse(url));
                     startActivity(i);
                 } catch (Exception e) {
-                    Toast.makeText(getContext(), "Vous n'avez pas d'application qui puisse permettre d'ouvrir le profil Deezer.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.can_t_open_deezer, Toast.LENGTH_SHORT).show();
                 }
             });
         }
 
         String spotify = artist.getSpotify();
-        if(spotify.isEmpty() || spotify == null) {
+        if(spotify.isEmpty()) {
             binding.spotify.setVisibility(View.GONE);
         } else {
             binding.spotify.setOnClickListener(v -> {
                 try {
-                    String url = "https://open.spotify.com/";
+                    String url = getString(R.string.url_spotify);
                     String[] tokens = spotify.split(":");
                     url+=tokens[1]+"/"+tokens[2];
                     Intent i = new Intent(Intent.ACTION_VIEW);
                     i.setData(Uri.parse(url));
                     startActivity(i);
                 } catch (Exception e) {
-                    Toast.makeText(getContext(), "Vous n'avez pas d'application qui puisse permettre d'ouvrir le profil Spotify.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), R.string.can_t_open_spotify, Toast.LENGTH_SHORT).show();
                 }
             });
         }
@@ -126,7 +125,7 @@ public class DisplayFragment extends Fragment {
         linearLayout.addView(rating);
 
         popDialog.setIcon(R.drawable.ic_star);
-        popDialog.setTitle("Add Rating: ");
+        popDialog.setTitle(R.string.your_rate);
 
         //add linearLayout to dailog
         popDialog.setView(linearLayout);

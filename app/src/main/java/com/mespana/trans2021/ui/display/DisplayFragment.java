@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -36,6 +37,9 @@ import com.mespana.trans2021.models.Note;
 import com.mespana.trans2021.services.FirebaseService;
 import com.mespana.trans2021.services.JsonParsingService;
 import com.mespana.trans2021.services.SpotifyService;
+import com.spotify.android.appremote.api.ConnectionParams;
+import com.spotify.android.appremote.api.Connector;
+import com.spotify.android.appremote.api.SpotifyAppRemote;
 
 import java.util.ArrayList;
 
@@ -44,9 +48,40 @@ public class DisplayFragment extends Fragment implements EventListener<QuerySnap
     FragmentDisplayBinding binding;
     String recordId;
 
+    private static final String CLIENT_ID = "4fb4752c0855467ba1764236a40569b8";
+    private static final String REDIRECT_URI = "http://com.mespana.trans2021/callback";
+    private SpotifyAppRemote mSpotifyAppRemote;
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        ConnectionParams connectionParams =
+                new ConnectionParams.Builder(CLIENT_ID)
+                        .setRedirectUri(REDIRECT_URI)
+                        .showAuthView(true)
+                        .build();
+
+        SpotifyAppRemote.connect(getContext(), connectionParams,
+                new Connector.ConnectionListener() {
+
+                    @Override
+                    public void onConnected(SpotifyAppRemote spotifyAppRemote) {
+                        mSpotifyAppRemote = spotifyAppRemote;
+                        Log.d("MainActivity", "Connected! Yay!");
+
+                        // Now you can start interacting with App Remote
+                    }
+
+                    @Override
+                    public void onFailure(Throwable throwable) {
+                        Log.e("MainActivity", throwable.getMessage(), throwable);
+
+                        // Something went wrong when attempting to connect! Handle errors here
+                    }
+                });
+
     }
 
     @Override
@@ -60,7 +95,7 @@ public class DisplayFragment extends Fragment implements EventListener<QuerySnap
         binding = FragmentDisplayBinding.inflate(inflater, container, false);
         if(artist == null) {
             Toast.makeText(getContext(), R.string.artist_does_not_exist, Toast.LENGTH_SHORT).show();
-            Navigation.findNavController(getView()).navigate(R.id.action_displayFragment_to_tabsFragment);
+            Navigation.findNavController(getView()).navigate(R.id.action_displayFragment_pop);
         }
         binding.comments.setOnClickListener(view -> Navigation.findNavController(view).navigate(R.id.action_displayFragment_to_commentsFragment));
         FirebaseService.getAverageNoteOfArtist(recordId).addSnapshotListener(this);
@@ -94,12 +129,15 @@ public class DisplayFragment extends Fragment implements EventListener<QuerySnap
         } else {
             binding.spotify.setOnClickListener(v -> {
                 try {
+                    /*
                     String url = getString(R.string.url_spotify);
                     String[] tokens = spotify.split(":");
                     url+=tokens[1]+"/"+tokens[2];
                     Intent i = new Intent(Intent.ACTION_VIEW);
                     i.setData(Uri.parse(url));
                     startActivity(i);
+                    */
+                    mSpotifyAppRemote.getPlayerApi().play(spotify);
                 } catch (Exception e) {
                     Toast.makeText(getContext(), R.string.can_t_open_spotify, Toast.LENGTH_SHORT).show();
                 }

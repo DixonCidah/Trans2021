@@ -3,18 +3,16 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.profile.ProfileFragment">
+    tools:context=".ui.profile.LoginFragment">
 
-    <!-- TODO: Update blank fragment layout -->
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:text="Bonsoir, oui" />
 
     <Button
-        android:id="@+id/button_signout"
+        android:id="@+id/button_signin"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="deconnexion 😔"/>
-
+        android:text="connexion 😌"/>
 </FrameLayout>

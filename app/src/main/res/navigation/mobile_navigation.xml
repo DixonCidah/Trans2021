@@ -59,4 +59,9 @@
         android:name="com.mespana.trans2021.ui.profile.ProfileFragment"
         android:label="fragment_profile"
         tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/login_fragment"
+        android:name="com.mespana.trans2021.ui.profile.LoginFragment"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login" />
 </navigation>

@@ -43,34 +43,23 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupWithNavController(binding.navView, navController);
 
-        // TODO rémi
-        /*binding.account.setText(R.string.signin);
-        binding.account.setOnClickListener(view -> {
-            if (FirebaseAuth.getInstance().getCurrentUser() == null) {
-                signIn();
-            }
-            else{
-                signOut();
-            }
-        });*/
     }
 
-    private void signOut() {
-        // TODO rémi
-        /*new MaterialAlertDialogBuilder(this)
+    public void signOut() {
+        new MaterialAlertDialogBuilder(this)
                 .setTitle(getResources().getString(R.string.signout_dialog_title))
                 .setMessage(getResources().getString(R.string.signout_dialog_message))
                 .setPositiveButton(R.string.ok, (dialogInterface, i) -> {
                     AuthUI.getInstance()
                             .signOut(this)
                             .addOnCompleteListener(task -> {
-                                binding.account.setText(R.string.signin);
+                                // TODO enlever la photo du user dans la bottom bar
                             });
                 })
                 .setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
                 })
 
-        .show();*/
+        .show();
     }
 
     public void signIn() {
@@ -95,19 +84,19 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         // TODO rémi
-        /*if (requestCode == RC_SIGN_IN) {
+        if (requestCode == RC_SIGN_IN) {
             IdpResponse response = IdpResponse.fromResultIntent(data);
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             if (resultCode == RESULT_OK && user != null) {
                 // Successfully signed in
-                binding.account.setText(user.getDisplayName());
+                // TODO photo du compte dans la navbar
             } else {
                 // Sign in failed. If response is null the user canceled the
                 // sign-in flow using the back button. Otherwise check
                 // response.getError().getErrorCode() and handle the error.
                 // ...
             }
-        }*/
+        }
     }
 
     public void needsToSignIn() {

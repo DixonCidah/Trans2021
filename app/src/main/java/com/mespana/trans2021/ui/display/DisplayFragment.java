@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Gravity;
@@ -16,12 +17,11 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
-import com.firebase.ui.auth.AuthUI;
-import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentChange;
@@ -33,6 +33,7 @@ import com.mespana.trans2021.MainActivity;
 import com.mespana.trans2021.R;
 import com.mespana.trans2021.databinding.FragmentDisplayBinding;
 import com.mespana.trans2021.models.Artist;
+import com.mespana.trans2021.models.Event;
 import com.mespana.trans2021.models.Note;
 import com.mespana.trans2021.services.FirebaseService;
 import com.mespana.trans2021.services.JsonParsingService;
@@ -51,7 +52,6 @@ public class DisplayFragment extends Fragment implements EventListener<QuerySnap
     private static final String CLIENT_ID = "4fb4752c0855467ba1764236a40569b8";
     private static final String REDIRECT_URI = "http://com.mespana.trans2021/callback";
     private SpotifyAppRemote mSpotifyAppRemote;
-
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -82,8 +82,10 @@ public class DisplayFragment extends Fragment implements EventListener<QuerySnap
                     }
                 });
 
+
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public View onCreateView(
             @NonNull LayoutInflater inflater, ViewGroup container,
@@ -107,6 +109,8 @@ public class DisplayFragment extends Fragment implements EventListener<QuerySnap
         if(ville == null || ville.isEmpty()) binding.city.setVisibility(View.GONE);
         else binding.city.setText(ville);
         String deezer = artist.getDeezer();
+        String spotify = artist.getSpotify();
+/*
         if(deezer.isEmpty()) {
             binding.deezer.setVisibility(View.GONE);
         } else {
@@ -121,28 +125,31 @@ public class DisplayFragment extends Fragment implements EventListener<QuerySnap
                     Toast.makeText(getContext(), R.string.can_t_open_deezer, Toast.LENGTH_SHORT).show();
                 }
             });
-        }
+        }*/
 
-        String spotify = artist.getSpotify();
         if(spotify.isEmpty()) {
-            binding.spotify.setVisibility(View.GONE);
+            binding.cardSpotify.setVisibility(View.GONE);
         } else {
-            binding.spotify.setOnClickListener(v -> {
+            binding.spotifyPlay.setOnClickListener(v -> {
                 try {
-                    /*
-                    String url = getString(R.string.url_spotify);
-                    String[] tokens = spotify.split(":");
-                    url+=tokens[1]+"/"+tokens[2];
-                    Intent i = new Intent(Intent.ACTION_VIEW);
-                    i.setData(Uri.parse(url));
-                    startActivity(i);
-                    */
                     mSpotifyAppRemote.getPlayerApi().play(spotify);
                 } catch (Exception e) {
                     Toast.makeText(getContext(), R.string.can_t_open_spotify, Toast.LENGTH_SHORT).show();
                 }
             });
+            binding.spotifyPause.setOnClickListener(v -> {
+                try {
+                    mSpotifyAppRemote.getPlayerApi().pause();
+                } catch (Exception e) {
+                    Toast.makeText(getContext(), R.string.can_t_open_spotify, Toast.LENGTH_SHORT).show();
+                }
+            });
         }
+
+
+
+
+
         // si pas d'image récupérée, on met l'image de base (ic_profile)
         //binding.roundedImage.setImageDrawable();
         if(artist.isTriedToLoadImage()) binding.image.setImageBitmap(artist.getLoadedImage());

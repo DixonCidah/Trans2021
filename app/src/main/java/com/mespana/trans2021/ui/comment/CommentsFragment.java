@@ -33,7 +33,7 @@ public class CommentsFragment extends Fragment {
         String recordId = sharedPref.getString(getActivity().getString(R.string.shared_prefs_artist_rec_id), getActivity().getString(R.string.unknown_artists));
         Artist artist = JsonParsingService.getArtistFromRecordId(recordId);
         this.binding = FragmentCommentsBinding.inflate(inflater, container, false);
-        this.binding.recyclerView.setAdapter(new CommentsRecyclerViewAdapter(FirebaseService.getCommentsFromArtist(artist)));
+        this.binding.recyclerView.setAdapter(new CommentsRecyclerViewAdapter(FirebaseService.getCommentsFromArtistRecordId(artist.getRecordid())));
         binding.confirmButton.setOnClickListener(view -> {
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             if(user != null){

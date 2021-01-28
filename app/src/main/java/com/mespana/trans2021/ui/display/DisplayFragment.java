@@ -19,11 +19,15 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 
+import com.firebase.ui.auth.AuthUI;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.mespana.trans2021.MainActivity;
 import com.mespana.trans2021.R;
 import com.mespana.trans2021.databinding.FragmentDisplayBinding;
 import com.mespana.trans2021.models.Artist;
@@ -116,45 +120,49 @@ public class DisplayFragment extends Fragment implements EventListener<QuerySnap
     }
 
     private void showDialog() {
-        Context context = getContext();
-        final AlertDialog.Builder popDialog = new AlertDialog.Builder(context);
-        LinearLayout linearLayout = new LinearLayout(context);
-        final RatingBar rating = new RatingBar(context);
+        if (FirebaseAuth.getInstance().getCurrentUser() != null){
+            Context context = getContext();
+            final AlertDialog.Builder popDialog = new AlertDialog.Builder(context);
+            LinearLayout linearLayout = new LinearLayout(context);
+            final RatingBar rating = new RatingBar(context);
 
-        LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-        );
+            LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT
+            );
 
-        linearLayout.setGravity(Gravity.CENTER_HORIZONTAL);
+            linearLayout.setGravity(Gravity.CENTER_HORIZONTAL);
 
-        rating.setLayoutParams(lp);
-        rating.setNumStars(5);
-        rating.setStepSize(1);
+            rating.setLayoutParams(lp);
+            rating.setNumStars(5);
+            rating.setStepSize(1);
 
-        //add ratingBar to linearLayout
-        linearLayout.addView(rating);
+            //add ratingBar to linearLayout
+            linearLayout.addView(rating);
 
-        popDialog.setIcon(R.drawable.ic_star);
-        popDialog.setTitle(R.string.your_rate);
+            popDialog.setIcon(R.drawable.ic_star);
+            popDialog.setTitle(R.string.your_rate);
 
-        //add linearLayout to dailog
-        popDialog.setView(linearLayout);
+            //add linearLayout to dailog
+            popDialog.setView(linearLayout);
 
-        rating.setOnRatingBarChangeListener((ratingBar, v, b) -> System.out.println("Rated val:"+v));
+            rating.setOnRatingBarChangeListener((ratingBar, v, b) -> System.out.println("Rated val:"+v));
 
-        // Button OK
-        popDialog.setPositiveButton(android.R.string.ok,
-                (dialog, which) -> {
-                    FirebaseService.postNoteOfArtist(new Note((int)rating.getRating(), "userid", recordId));
-                    dialog.dismiss();
-                })
-                // Button Cancel
-                .setNegativeButton("Cancel",
-                        (dialog, id) -> dialog.cancel());
+            // Button OK
+            popDialog.setPositiveButton(android.R.string.ok,
+                    (dialog, which) -> {
+                        FirebaseService.postNoteOfArtist(new Note((int)rating.getRating(), "userid", recordId));
+                        dialog.dismiss();
+                    })
+                    // Button Cancel
+                    .setNegativeButton("Cancel",
+                            (dialog, id) -> dialog.cancel());
 
-        popDialog.create();
-        popDialog.show();
+            popDialog.create();
+            popDialog.show();
+        } else {
+            ((MainActivity)this.getActivity()).needsToSignIn();
+        }
     }
 
     private ArrayList<DocumentSnapshot> documentSnapshots = new ArrayList<>();

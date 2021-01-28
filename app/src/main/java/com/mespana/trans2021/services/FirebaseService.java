@@ -24,6 +24,6 @@ public class FirebaseService {
 
    public static void postNoteOfArtist(Note note) {
       FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-      firestore.collection("notes" + note.getRecordId()).add(note);
+      firestore.collection("notes" + note.getRecordId()).document(note.getUserId()).set(note);
    }
 }

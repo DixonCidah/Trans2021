@@ -20,6 +20,7 @@ import com.mespana.trans2021.databinding.FragmentProfileBinding;
 public class ProfileFragment extends Fragment {
 
     FragmentProfileBinding binding;
+    NavController navController;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -30,17 +31,15 @@ public class ProfileFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         this.binding = FragmentProfileBinding.inflate(inflater, container, false);
-        this.binding.buttonSignout.setOnClickListener(view -> ((MainActivity)getActivity()).signOut());
+        this.binding.buttonSignout.setOnClickListener(view -> ((MainActivity)getActivity()).signOut(() -> this.navController.navigate(R.id.login_fragment)));
         return this.binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        final NavController navController = Navigation.findNavController(view);
-        if (FirebaseAuth.getInstance().getCurrentUser() != null) {
-            //showWelcomeMessage();
-        } else {
+        this.navController = Navigation.findNavController(view);
+        if (FirebaseAuth.getInstance().getCurrentUser() == null) {
             navController.navigate(R.id.login_fragment);
         }
 

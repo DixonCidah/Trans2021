@@ -24,11 +24,9 @@ import java.util.stream.Collectors;
 public class ArtistsLocalService {
 
     private static List<Artist> artistList;
-    private static SharedPreferences sharedPref;
-    private final static String favartists_id = "FAVARTISTS";
 
     public static void parseJson(Activity context){
-        sharedPref = context.getPreferences(Context.MODE_PRIVATE);
+        SharedPreferencesService.load(context);
         InputStream inputStream = context.getResources().openRawResource(R.raw.out);
         StringBuilder resultStringBuilder = new StringBuilder();
         try (BufferedReader br = new BufferedReader(new InputStreamReader(inputStream))) {
@@ -42,7 +40,7 @@ public class ArtistsLocalService {
         try {
             JSONArray jsonarray = new JSONArray(resultStringBuilder.toString());
             artistList = new ArrayList<>();
-            final Set<String> favArtists = sharedPref.getStringSet(favartists_id, new HashSet<>());
+            final Set<String> favArtists = SharedPreferencesService.getFavArtists();
             for (int i = 0; i < jsonarray.length(); i++) {
                 final Artist artist = new Artist(jsonarray.getJSONObject(i));
                 artist.setFavorite(favArtists.contains(artist.getRecordid()));
@@ -62,19 +60,11 @@ public class ArtistsLocalService {
     }
 
     public static void addFavorite(Artist artist){
-        SharedPreferences.Editor editor = sharedPref.edit();
-        Set<String> favartists = sharedPref.getStringSet(favartists_id, new HashSet<>());
-        favartists.add(artist.getRecordid());
-        editor.putStringSet(favartists_id, favartists);
-        editor.apply();
+        SharedPreferencesService.addArtist(artist.getRecordid());
     }
 
     public static void removeFavorite(Artist artist) {
-        SharedPreferences.Editor editor = sharedPref.edit();
-        Set<String> favartists = sharedPref.getStringSet(favartists_id, new HashSet<>());
-        favartists.remove(artist.getRecordid());
-        editor.putStringSet(favartists_id, favartists);
-        editor.apply();
+        SharedPreferencesService.removeArtist(artist.getRecordid());
     }
 
     public static List<Artist> getFavoriteArtists(){

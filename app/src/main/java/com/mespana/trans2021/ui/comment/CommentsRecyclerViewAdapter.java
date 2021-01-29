@@ -60,12 +60,11 @@ public class CommentsRecyclerViewAdapter extends FirestoreRecyclerViewAdapter<Co
                 @Override
                 public void onSuccess(Bitmap bitmap) {
                     activity.runOnUiThread(() -> binding.userPp.setImageBitmap(bitmap));
-
                 }
 
                 @Override
                 public void onFailure() {
-
+                    activity.runOnUiThread(() -> binding.userPp.setImageResource(R.mipmap.ic_launcher));
                 }
             });
         }

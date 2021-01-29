@@ -51,7 +51,7 @@
                 android:layout_marginRight="8dp"
                 app:iconGravity="end"
                 android:src="@drawable/ic_check_24px"
-                android:tint="@color/colorPrimary"
+                android:tint="?attr/colorPrimary"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 />
         </LinearLayout>

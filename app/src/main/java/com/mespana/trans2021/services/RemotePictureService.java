@@ -36,22 +36,15 @@ public class RemotePictureService {
                   JSONObject responseJson = new JSONObject(response.body().string());
                   if (responseJson.has("thumbnail_url")) {
                      String imageUrl = responseJson.getString("thumbnail_url");
-                     Request requestImage = new Request.Builder()
-                             .url(imageUrl)
-                             .build();
-                     client.newCall(requestImage).enqueue(new Callback() {
+                     getImageFromUrl(imageUrl, new ImageHandler() {
                         @Override
-                        public void onResponse(@NotNull Call call, @NotNull Response responseImage) throws IOException {
-                           if (responseImage.isSuccessful()) {
-                              Bitmap bitmap = BitmapFactory.decodeStream(responseImage.body().byteStream());
-                              artist.setLoadedImage(bitmap);
-                              imageHandler.onSuccess(bitmap);
-                           }
+                        public void onSuccess(Bitmap bitmap) {
+                           artist.setLoadedImage(bitmap);
+                           imageHandler.onSuccess(bitmap);
                         }
 
                         @Override
-                        public void onFailure(@NotNull Call call, @NotNull IOException e) {
-                        }
+                        public void onFailure() { }
                      });
                   }
                }

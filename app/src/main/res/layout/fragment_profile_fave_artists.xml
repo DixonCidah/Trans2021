@@ -6,21 +6,15 @@
     android:layout_height="wrap_content"
     android:background="?attr/selectableItemBackground"
     android:orientation="horizontal">
-    <androidx.cardview.widget.CardView
-        android:id="@+id/myCardView"
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/artists_img"
+        android:layout_centerHorizontal="true"
         android:layout_width="48dp"
         android:layout_height="48dp"
-        app:cardCornerRadius="24dp"
         android:layout_margin="16dp"
-        android:layout_centerHorizontal="true">
-        <ImageView
-            android:id="@+id/artists_img"
-            android:src="@drawable/transmusicales_template_image"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="centerCrop"
-            />
-    </androidx.cardview.widget.CardView>
+        android:layout_marginTop="50dp"
+        app:srcCompat="@drawable/transmusicales_template_image"
+        app:shapeAppearanceOverlay="@style/ShapeAppearanceOverlay.App.CornerSize50Percent" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -49,7 +43,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/colorPrimaryDark"
+            android:background="?attr/colorPrimaryDark"
             android:layout_marginTop="6dp" />
     </LinearLayout>
 </LinearLayout>

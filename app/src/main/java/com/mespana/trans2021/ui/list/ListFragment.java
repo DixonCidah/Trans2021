@@ -25,7 +25,7 @@ public class ListFragment extends Fragment {
             Bundle savedInstanceState) {
         binding = FragmentListBinding.inflate(inflater, container, false);
         binding.list.setAdapter(new ArtistsRecyclerViewAdapter(getActivity(), ArtistsLocalService.getArtistListFiltre()));
-        ArtistsLocalService.setArtistListFiltre(ArtistsLocalService.getArtistList());
+        ArtistsLocalService.resetFiltres();
         View root = binding.getRoot();
         return root;
     }

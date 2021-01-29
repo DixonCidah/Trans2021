@@ -3,6 +3,7 @@ package com.mespana.trans2021.ui.display;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -38,6 +39,7 @@ import com.mespana.trans2021.models.Note;
 import com.mespana.trans2021.services.FirebaseService;
 import com.mespana.trans2021.services.JsonParsingService;
 import com.mespana.trans2021.services.SpotifyService;
+import com.mespana.trans2021.services.handlers.ImageHandler;
 import com.spotify.android.appremote.api.ConnectionParams;
 import com.spotify.android.appremote.api.Connector;
 import com.spotify.android.appremote.api.SpotifyAppRemote;
@@ -85,6 +87,12 @@ public class DisplayFragment extends Fragment implements EventListener<QuerySnap
 
     }
 
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        SpotifyAppRemote.disconnect(mSpotifyAppRemote);
+    }
+
     @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     public View onCreateView(
@@ -110,7 +118,7 @@ public class DisplayFragment extends Fragment implements EventListener<QuerySnap
         else binding.city.setText(ville);
         String deezer = artist.getDeezer();
         String spotify = artist.getSpotify();
-/*
+
         if(deezer.isEmpty()) {
             binding.deezer.setVisibility(View.GONE);
         } else {
@@ -125,41 +133,52 @@ public class DisplayFragment extends Fragment implements EventListener<QuerySnap
                     Toast.makeText(getContext(), R.string.can_t_open_deezer, Toast.LENGTH_SHORT).show();
                 }
             });
-        }*/
+        }
 
         if(spotify.isEmpty()) {
             binding.cardSpotify.setVisibility(View.GONE);
         } else {
             binding.spotifyPlay.setOnClickListener(v -> {
-                try {
-                    mSpotifyAppRemote.getPlayerApi().play(spotify);
-                } catch (Exception e) {
-                    Toast.makeText(getContext(), R.string.can_t_open_spotify, Toast.LENGTH_SHORT).show();
-                }
-            });
-            binding.spotifyPause.setOnClickListener(v -> {
-                try {
+                if(binding.spotifyPlay.getTag().equals("pause")) {
+                    try {
+                        mSpotifyAppRemote.getPlayerApi().play(spotify);
+                        binding.spotifyPlay.setBackground(context.getDrawable(R.drawable.ic_pause));
+                        binding.spotifyPlay.setTag("play");
+                    } catch (Exception e) {
+                        Toast.makeText(getContext(), R.string.can_t_open_spotify, Toast.LENGTH_SHORT).show();
+                        try {
+                            String url = getString(R.string.url_spotify);
+                            String[] tokens = spotify.split(":");
+                            url+=tokens[1]+"/"+tokens[2];
+                            Intent i = new Intent(Intent.ACTION_VIEW);
+                            i.setData(Uri.parse(url));
+                            startActivity(i);
+                        } catch (Exception e2) {
+                            Toast.makeText(getContext(), R.string.can_t_open_spotify, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                } else {
                     mSpotifyAppRemote.getPlayerApi().pause();
-                } catch (Exception e) {
-                    Toast.makeText(getContext(), R.string.can_t_open_spotify, Toast.LENGTH_SHORT).show();
+                    binding.spotifyPlay.setBackground(context.getDrawable(R.drawable.ic_play));
+                    binding.spotifyPlay.setTag("pause");
                 }
+
             });
         }
-
-
-
-
 
         // si pas d'image récupérée, on met l'image de base (ic_profile)
         //binding.roundedImage.setImageDrawable();
-        if(artist.isTriedToLoadImage()) binding.image.setImageBitmap(artist.getLoadedImage());
-        if (artist.getLoadedImage() != null){
-            binding.image.setImageBitmap(artist.getLoadedImage());
-        }else{
-            SpotifyService.getPictureFromSpotifyAlbumId(artist,
-                    bitmap -> getActivity().runOnUiThread(() -> binding.image.setImageBitmap(bitmap))
-            );
+        if(artist.isTriedToLoadImage()) {
+            if (artist.getLoadedImage() != null){
+                binding.image.setImageBitmap(artist.getLoadedImage());
+            } else {
+                SpotifyService.getPictureFromSpotifyAlbumId(artist,
+                        bitmap -> getActivity().runOnUiThread(() -> binding.image.setImageBitmap(bitmap))
+                );
+            }
         }
+
+
         binding.rate.setOnClickListener(view -> showDialog());
         View root = binding.getRoot();
         return root;

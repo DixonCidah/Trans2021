@@ -1,15 +1,14 @@
 package com.mespana.trans2021.ui.profile;
 
 import android.graphics.Bitmap;
-import android.net.Uri;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
 import androidx.navigation.fragment.NavHostFragment;
 
 import android.view.LayoutInflater;
@@ -20,9 +19,15 @@ import com.google.firebase.auth.FirebaseUser;
 import com.mespana.trans2021.MainActivity;
 import com.mespana.trans2021.R;
 import com.mespana.trans2021.databinding.FragmentProfileBinding;
+import com.mespana.trans2021.models.Artist;
 import com.mespana.trans2021.services.ArtistsLocalService;
 import com.mespana.trans2021.services.RemotePictureService;
 import com.mespana.trans2021.services.handlers.ImageHandler;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class ProfileFragment extends Fragment {
 
@@ -39,6 +44,7 @@ public class ProfileFragment extends Fragment {
                              Bundle savedInstanceState) {
         this.navController = NavHostFragment.findNavController(this);
         this.binding = FragmentProfileBinding.inflate(inflater, container, false);
+
         if (FirebaseAuth.getInstance().getCurrentUser() == null) {
             navController.navigate(R.id.login_fragment);
         }else {
@@ -53,6 +59,13 @@ public class ProfileFragment extends Fragment {
             });
             refreshProfilePicture();
             binding.list.setAdapter(new FavoriteArtistsRecyclerViewAdapter(getActivity(), ArtistsLocalService.getArtistList()/*TODO retrieve list through sharedPrefs*/));
+            SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+            Set<String> favartists = sharedPref.getStringSet("FAVARTISTS", new HashSet<>());
+            List<Artist> newList = new ArrayList<>();
+            for(Artist a : ArtistsLocalService.getArtistList()) {
+                if(favartists.contains(a.getRecordid())) newList.add(a);
+            }
+            binding.list.setAdapter(new FavoriteArtistsRecyclerViewAdapter(getActivity(), newList));
         }
         return this.binding.getRoot();
     }

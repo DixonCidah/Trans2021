@@ -9,7 +9,7 @@
     android:orientation="vertical"
     tools:context=".ui.display.DisplayFragment">
 
-    <ScrollView android:id="@+id/ScrollViewID"
+    <androidx.core.widget.NestedScrollView android:id="@+id/ScrollViewID"
         android:layout_width="fill_parent"
         android:layout_height="match_parent">
 
@@ -95,7 +95,9 @@
                             android:textAppearance="?attr/textAppearanceBody2"
                             android:layout_weight="1"/>
                         <TextView
+                            android:layout_marginStart="15dp"
                             android:id="@+id/edition"
+                            android:maxWidth="250dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textAppearance="?attr/textAppearanceBody2"
@@ -124,7 +126,7 @@
                         tools:listitem="@layout/fragment_display_editions_list_item"/>
                     <!-- Buttons -->
                     <LinearLayout
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
                         <com.google.android.material.button.MaterialButton
@@ -140,8 +142,19 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/comments"
+                            android:layout_weight="1"
                             style="?attr/borderlessButtonStyle"
                             />
+                        <ImageButton
+                            android:id="@+id/button_fav"
+                            android:layout_gravity="bottom|end"
+                            android:layout_margin="16dp"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:tint="?attr/colorOnBackground"
+                            android:src="@drawable/button_like"
+                            android:background="?attr/selectableItemBackgroundBorderless" />
+
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
@@ -152,7 +165,7 @@
             android:id="@+id/cardSpotify"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="10dp"
+            app:cardCornerRadius="20dp"
             android:layout_margin="8dp"
             android:layout_gravity="bottom|center">
 
@@ -165,7 +178,6 @@
                 <ImageView
                     android:id="@+id/spotify"
                     android:background="@drawable/spotify"
-                    app:cornerRadius="26dp"
                     android:layout_margin="20dp"
                     android:layout_width="52dp"
                     android:layout_height="52dp"/>
@@ -174,7 +186,6 @@
                     android:id="@+id/spotifyPlay"
                     android:background="@drawable/ic_play"
                     android:tag="pause"
-                    app:cornerRadius="26dp"
                     android:layout_margin="20dp"
                     android:layout_width="52dp"
                     android:layout_height="52dp"/>
@@ -187,7 +198,7 @@
             android:id="@+id/cardDeezer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="10dp"
+            app:cardCornerRadius="20dp"
             android:layout_margin="8dp"
             android:layout_gravity="bottom|center">
 
@@ -200,28 +211,16 @@
                     android:id="@+id/deezer"
                     android:background="@drawable/deezer"
                     app:cornerRadius="26dp"
-                    android:layout_margin="20dp"
                     android:layout_gravity="center|center"
-                    android:layout_width="104dp"
-                    android:layout_height="52dp"
+                    android:layout_width="184dp"
+                    android:layout_height="92dp"
                     android:scaleType="fitXY"
                     android:adjustViewBounds="true"/>
 
             </androidx.coordinatorlayout.widget.CoordinatorLayout>
         </com.google.android.material.card.MaterialCardView>
-
     </LinearLayout>
-
-    </ScrollView>
-
-    <!--    <ImageButton-->
-    <!--        android:id="@+id/deezer"-->
-    <!--        android:background="@drawable/deezer"-->
-    <!--        app:cornerRadius="26dp"-->
-    <!--        android:layout_margin="20dp"-->
-    <!--        android:layout_gravity="end|bottom"-->
-    <!--        android:layout_width="52dp"-->
-    <!--        android:layout_height="52dp"/>-->
+    </androidx.core.widget.NestedScrollView>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 

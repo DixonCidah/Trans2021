@@ -36,7 +36,7 @@ public class CommentsFragment extends Fragment {
         String recordId = sharedPref.getString(getActivity().getString(R.string.shared_prefs_artist_rec_id), getActivity().getString(R.string.unknown_artists));
         Artist artist = ArtistsLocalService.getArtistFromRecordId(recordId);
         this.binding = FragmentCommentsBinding.inflate(inflater, container, false);
-        this.binding.recyclerView.setAdapter(new CommentsRecyclerViewAdapter(FirebaseService.getCommentsFromArtistRecordId(artist.getRecordid())));
+        this.binding.recyclerView.setAdapter(new CommentsRecyclerViewAdapter(FirebaseService.getCommentsFromArtistRecordId(artist.getRecordid()), getActivity()));
         this.binding.filledTextField.getEditText().addTextChangedListener(new TextWatcher() {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
@@ -57,7 +57,7 @@ public class CommentsFragment extends Fragment {
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             if(user != null){
                 Comment comment = new Comment(user.getDisplayName(),
-                        "", // url photo
+                        user.getPhotoUrl().toString(), // url photo
                         this.binding.filledTextField.getEditText().getText().toString(),
                         new Date(System.currentTimeMillis()),
                         artist.getRecordid());

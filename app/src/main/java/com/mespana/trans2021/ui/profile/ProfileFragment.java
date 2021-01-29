@@ -1,5 +1,7 @@
 package com.mespana.trans2021.ui.profile;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -19,7 +21,13 @@ import com.google.firebase.auth.FirebaseUser;
 import com.mespana.trans2021.MainActivity;
 import com.mespana.trans2021.R;
 import com.mespana.trans2021.databinding.FragmentProfileBinding;
+import com.mespana.trans2021.models.Artist;
 import com.mespana.trans2021.services.ArtistsLocalService;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 public class ProfileFragment extends Fragment {
 
@@ -45,8 +53,14 @@ public class ProfileFragment extends Fragment {
         binding.roundedImage.setOnClickListener(view -> {
             // TODO change profile image?
         });
+        SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+        Set<String> favartists = sharedPref.getStringSet("FAVARTISTS", new HashSet<>());
+        List<Artist> newList = new ArrayList<>();
+        for(Artist a : ArtistsLocalService.getArtistList()) {
+            if(favartists.contains(a.getRecordid())) newList.add(a);
+        }
         //binding.roundedimage.setImageBitmap(); // TODO replace with Uri
-        binding.list.setAdapter(new FavoriteArtistsRecyclerViewAdapter(getActivity(), ArtistsLocalService.getArtistList()/*TODO retrieve list through sharedPrefs*/));
+        binding.list.setAdapter(new FavoriteArtistsRecyclerViewAdapter(getActivity(), newList/*TODO retrieve list through sharedPrefs*/));
 
         return this.binding.getRoot();
     }

@@ -33,4 +33,11 @@
     <string name="your_rate">Votre note :</string>
     <string name="require_connextion_dialog_title">Connexion obligatoire</string>
     <string name="require_connextion_dialog_message">Cette action requiert un compte, voulez-vous vous connecter ?</string>
+    <string name="search_name">Par nom : </string>
+    <string name="search_year">Par année : </string>
+    <string name="search_origin">Par pays d\'origine : </string>
+    <string name="search">Rechercher</string>
+    <string name="originHint">Entrez le Pays d\'origine de l\'artiste</string>
+    <string name="yearHint">Cliquez pour selectionner l\'année</string>
+    <string name="nameHint">Entrez le nom de l\'artiste</string>
 </resources>

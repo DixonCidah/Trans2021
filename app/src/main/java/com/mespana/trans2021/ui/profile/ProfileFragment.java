@@ -8,6 +8,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -34,30 +35,29 @@ public class ProfileFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        this.navController = NavHostFragment.findNavController(this);
         this.binding = FragmentProfileBinding.inflate(inflater, container, false);
-        this.binding.buttonSignout.setOnClickListener(view -> ((MainActivity)getActivity()).signOut(() -> this.navController.navigate(R.id.login_fragment)));
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-        String email = user.getEmail();
-        String name = user.getDisplayName();
-        Uri photoUrl = user.getPhotoUrl();
-        binding.email.setText(email);
-        binding.name.setText(name);
-        binding.roundedImage.setOnClickListener(view -> {
-            // TODO change profile image?
-        });
-        //binding.roundedimage.setImageBitmap(); // TODO replace with Uri
-        binding.list.setAdapter(new FavoriteArtistsRecyclerViewAdapter(getActivity(), ArtistsLocalService.getArtistList()/*TODO retrieve list through sharedPrefs*/));
-
+        if (FirebaseAuth.getInstance().getCurrentUser() == null) {
+            navController.navigate(R.id.login_fragment);
+        }else {
+            this.binding.buttonSignout.setOnClickListener(view -> ((MainActivity) getActivity()).signOut(() -> this.navController.navigate(R.id.login_fragment)));
+            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+            String email = user.getEmail();
+            String name = user.getDisplayName();
+            Uri photoUrl = user.getPhotoUrl();
+            binding.email.setText(email);
+            binding.name.setText(name);
+            binding.roundedImage.setOnClickListener(view -> {
+                // TODO change profile image?
+            });
+            //binding.roundedimage.setImageBitmap(); // TODO replace with Uri
+            binding.list.setAdapter(new FavoriteArtistsRecyclerViewAdapter(getActivity(), ArtistsLocalService.getArtistList()/*TODO retrieve list through sharedPrefs*/));
+        }
         return this.binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        this.navController = Navigation.findNavController(view);
-        if (FirebaseAuth.getInstance().getCurrentUser() == null) {
-            navController.navigate(R.id.login_fragment);
-        }
-
     }
 }

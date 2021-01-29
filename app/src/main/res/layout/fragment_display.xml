@@ -95,7 +95,9 @@
                             android:textAppearance="?attr/textAppearanceBody2"
                             android:layout_weight="1"/>
                         <TextView
+                            android:layout_marginStart="15dp"
                             android:id="@+id/edition"
+                            android:maxWidth="250dp"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textAppearance="?attr/textAppearanceBody2"
@@ -176,7 +178,6 @@
                 <ImageView
                     android:id="@+id/spotify"
                     android:background="@drawable/spotify"
-                    app:cornerRadius="26dp"
                     android:layout_margin="20dp"
                     android:layout_width="52dp"
                     android:layout_height="52dp"/>
@@ -185,7 +186,6 @@
                     android:id="@+id/spotifyPlay"
                     android:background="@drawable/ic_play"
                     android:tag="pause"
-                    app:cornerRadius="26dp"
                     android:layout_margin="20dp"
                     android:layout_width="52dp"
                     android:layout_height="52dp"/>
@@ -211,28 +211,16 @@
                     android:id="@+id/deezer"
                     android:background="@drawable/deezer"
                     app:cornerRadius="26dp"
-                    android:layout_margin="20dp"
                     android:layout_gravity="center|center"
-                    android:layout_width="104dp"
-                    android:layout_height="52dp"
+                    android:layout_width="184dp"
+                    android:layout_height="92dp"
                     android:scaleType="fitXY"
                     android:adjustViewBounds="true"/>
 
             </androidx.coordinatorlayout.widget.CoordinatorLayout>
         </com.google.android.material.card.MaterialCardView>
-
     </LinearLayout>
-
     </androidx.core.widget.NestedScrollView>
-
-    <!--    <ImageButton-->
-    <!--        android:id="@+id/deezer"-->
-    <!--        android:background="@drawable/deezer"-->
-    <!--        app:cornerRadius="26dp"-->
-    <!--        android:layout_margin="20dp"-->
-    <!--        android:layout_gravity="end|bottom"-->
-    <!--        android:layout_width="52dp"-->
-    <!--        android:layout_height="52dp"/>-->
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 

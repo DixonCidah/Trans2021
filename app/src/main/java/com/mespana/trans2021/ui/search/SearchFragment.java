@@ -4,6 +4,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
@@ -26,6 +27,15 @@ public class SearchFragment extends Fragment{
         super.onCreate(savedInstanceState);
         binding = FragmentSearchBinding.inflate(inflater,container,false);
         artistList = ArtistsLocalService.getArtistList();
+        binding.countryChip.setOnCheckedChangeListener((buttonView, isChecked) -> {
+
+        });
+        binding.nameChip.setOnCheckedChangeListener((buttonView, isChecked) -> {
+
+        });
+        binding.yearChip.setOnCheckedChangeListener((buttonView, isChecked) -> {
+
+        });
         View root = binding.getRoot();
         chooseYearOnly();
         setSearchButtonAction();
@@ -81,8 +91,6 @@ public class SearchFragment extends Fragment{
             Navigation.findNavController(v).navigate(R.id.action_navigation_search_to_navigation_list);
 
         });
-
-
 
     }
 

@@ -3,6 +3,7 @@ package com.mespana.trans2021.ui.profile;
 import android.graphics.Bitmap;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -73,16 +74,19 @@ public class ProfileFragment extends Fragment {
     private void refreshProfilePicture() {
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         if(user != null) {
-            RemotePictureService.getImageFromUrl(user.getPhotoUrl().toString(), new ImageHandler() {
-                @Override
-                public void onSuccess(Bitmap bitmap) {
-                    getActivity().runOnUiThread(() -> binding.roundedImage.setImageBitmap(bitmap));
-                }
+            Uri uri = user.getPhotoUrl();
+            if(uri != null) {
+                RemotePictureService.getImageFromUrl(uri.toString(), new ImageHandler() {
+                    @Override
+                    public void onSuccess(Bitmap bitmap) {
+                        getActivity().runOnUiThread(() -> binding.roundedImage.setImageBitmap(bitmap));
+                    }
 
-                @Override
-                public void onFailure() {
-                }
-            });
+                    @Override
+                    public void onFailure() {
+                    }
+                });
+            }
         }
     }
 

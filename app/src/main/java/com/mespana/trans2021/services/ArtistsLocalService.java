@@ -82,25 +82,23 @@ public class ArtistsLocalService {
     }
     public static List<Artist> getArtistFromYear(String year){
         Stream<Artist> art = artistListFiltre.stream();
-        artistListFiltre = Collections.unmodifiableList( (List<Artist>) (art.filter(artist -> artist.getAnnee().equals(year)).distinct().collect(Collectors.toList())));
-        return artistListFiltre;
+        return Collections.unmodifiableList( (List<Artist>) (art.filter(artist -> artist.getAnnee().equals(year)).distinct().collect(Collectors.toList())));
+
     }
 
     public static List<Artist> getArtistFromName(String name){
         Stream<Artist> art = artistListFiltre.stream();
-        artistListFiltre = Collections.unmodifiableList( (List<Artist>) (art.filter(artist -> artist.getArtistes().equals(name)).distinct().collect(Collectors.toList())));
-        return artistListFiltre;
+        return Collections.unmodifiableList( (List<Artist>) (art.filter(artist -> artist.getArtistes().equals(name)).distinct().collect(Collectors.toList())));
     }
 
     public static List<Artist> getArtistFromPlace(String place){
         Stream<Artist> art = artistListFiltre.stream();
-        artistListFiltre =  Collections.unmodifiableList( (List<Artist>)
+        return Collections.unmodifiableList( (List<Artist>)
                 (art.filter(artist -> artist.getOrigine_pays1().equals(place))
                         .distinct()
                         .collect(Collectors.toList()
                         )
                 )
         );
-        return artistListFiltre;
     }
 }

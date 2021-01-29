@@ -28,8 +28,6 @@
     <string name="title_search">Recherche</string>
     <string name="title_map">Carte</string>
     <string name="title_profile">Profil</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="your_rate">Votre note :</string>
     <string name="require_connextion_dialog_title">Connexion obligatoire</string>
     <string name="require_connextion_dialog_message">Cette action requiert un compte, voulez-vous vous connecter ?</string>
@@ -41,4 +39,6 @@
     <string name="yearHint">Cliquez pour selectionner l\'année</string>
     <string name="nameHint">Entrez le nom de l\'artiste</string>
     <string name="please_login">Veuillez vous connecter afin d\'accéder à toutes les fonctionnalités de l\'application.</string>
+    <string name="fave_artists">Artistes préférés</string>
+    <string name="log_out">déconnexion 😔</string>
 </resources>

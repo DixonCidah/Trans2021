@@ -97,6 +97,11 @@ public class ArtistsRecyclerViewAdapter  extends RecyclerView.Adapter<ArtistsRec
             }else {
                 binding.cover.setImageBitmap(artist.getLoadedImage());
             }
+            binding.buttonFav.setSelected(artist.isFavorite());
+            binding.buttonFav.setOnClickListener(view -> {
+                artist.toggleFavorite();
+                binding.buttonFav.setSelected(artist.isFavorite());
+            });
         }
 
         public ViewHolder(View view) {

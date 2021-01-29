@@ -18,7 +18,7 @@ import com.mespana.trans2021.models.Artist;
 import com.mespana.trans2021.models.Comment;
 
 import com.mespana.trans2021.services.FirebaseService;
-import com.mespana.trans2021.services.JsonParsingService;
+import com.mespana.trans2021.services.ArtistsLocalService;
 
 import java.util.Date;
 
@@ -34,7 +34,7 @@ public class CommentsFragment extends Fragment {
                              Bundle savedInstanceState) {
         SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
         String recordId = sharedPref.getString(getActivity().getString(R.string.shared_prefs_artist_rec_id), getActivity().getString(R.string.unknown_artists));
-        Artist artist = JsonParsingService.getArtistFromRecordId(recordId);
+        Artist artist = ArtistsLocalService.getArtistFromRecordId(recordId);
         this.binding = FragmentCommentsBinding.inflate(inflater, container, false);
         this.binding.recyclerView.setAdapter(new CommentsRecyclerViewAdapter(FirebaseService.getCommentsFromArtistRecordId(artist.getRecordid())));
         this.binding.filledTextField.getEditText().addTextChangedListener(new TextWatcher() {

@@ -6,22 +6,14 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
-import com.mespana.trans2021.R;
 import com.mespana.trans2021.databinding.FragmentSearchBinding;
-import com.mespana.trans2021.models.Artist;
-import com.mespana.trans2021.services.JsonParsingService;
 import com.whiteelephant.monthpicker.MonthPickerDialog;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 
 public class SearchFragment extends Fragment {

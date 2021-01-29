@@ -1,9 +1,7 @@
 package com.mespana.trans2021.ui.display;
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -33,10 +31,9 @@ import com.mespana.trans2021.MainActivity;
 import com.mespana.trans2021.R;
 import com.mespana.trans2021.databinding.FragmentDisplayBinding;
 import com.mespana.trans2021.models.Artist;
-import com.mespana.trans2021.models.Event;
 import com.mespana.trans2021.models.Note;
 import com.mespana.trans2021.services.FirebaseService;
-import com.mespana.trans2021.services.JsonParsingService;
+import com.mespana.trans2021.services.ArtistsLocalService;
 import com.mespana.trans2021.services.SpotifyService;
 import com.spotify.android.appremote.api.ConnectionParams;
 import com.spotify.android.appremote.api.Connector;
@@ -93,7 +90,7 @@ public class DisplayFragment extends Fragment implements EventListener<QuerySnap
         SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
         Context context = getContext();
         recordId = sharedPref.getString(context.getString(R.string.shared_prefs_artist_rec_id), context.getString(R.string.unknown_artists));
-        Artist artist = JsonParsingService.getArtistFromRecordId(recordId);
+        Artist artist = ArtistsLocalService.getArtistFromRecordId(recordId);
         binding = FragmentDisplayBinding.inflate(inflater, container, false);
         if(artist == null) {
             Toast.makeText(getContext(), R.string.artist_does_not_exist, Toast.LENGTH_SHORT).show();

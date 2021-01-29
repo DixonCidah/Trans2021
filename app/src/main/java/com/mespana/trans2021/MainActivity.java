@@ -1,27 +1,21 @@
 package com.mespana.trans2021;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.View;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.IdpResponse;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.mespana.trans2021.databinding.ActivityMainBinding;
-import com.mespana.trans2021.services.JsonParsingService;
+import com.mespana.trans2021.services.ArtistsLocalService;
 import com.mespana.trans2021.ui.profile.LoginFragment;
 
 import java.util.Arrays;
@@ -39,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMainBinding.inflate(getLayoutInflater());
 
-        JsonParsingService.parseJson(this);
+        ArtistsLocalService.parseJson(this);
         setContentView(binding.getRoot());
 
         // gestion bottom navigation

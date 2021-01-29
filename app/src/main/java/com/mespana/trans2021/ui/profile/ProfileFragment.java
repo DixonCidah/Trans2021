@@ -59,8 +59,14 @@ public class ProfileFragment extends Fragment {
             binding.roundedImage.setOnClickListener(view -> {
                 // TODO change profile image?
             });
+            SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+            Set<String> favartists = sharedPref.getStringSet("FAVARTISTS", new HashSet<>());
+            List<Artist> newList = new ArrayList<>();
+            for(Artist a : ArtistsLocalService.getArtistList()) {
+                if(favartists.contains(a.getRecordid())) newList.add(a);
+            }
+            binding.list.setAdapter(new FavoriteArtistsRecyclerViewAdapter(getActivity(), newList));
             //binding.roundedimage.setImageBitmap(); // TODO replace with Uri
-            binding.list.setAdapter(new FavoriteArtistsRecyclerViewAdapter(getActivity(), ArtistsLocalService.getArtistList()/*TODO retrieve list through sharedPrefs*/));
         }
         return this.binding.getRoot();
     }

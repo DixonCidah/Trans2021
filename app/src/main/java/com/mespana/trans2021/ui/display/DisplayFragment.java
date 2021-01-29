@@ -13,6 +13,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.Toast;
 
@@ -82,8 +84,6 @@ public class DisplayFragment extends Fragment implements EventListener<QuerySnap
                         // Something went wrong when attempting to connect! Handle errors here
                     }
                 });
-
-
     }
 
     @Override
@@ -177,6 +177,7 @@ public class DisplayFragment extends Fragment implements EventListener<QuerySnap
             }
         }
         binding.rate.setOnClickListener(view -> showDialog());
+        setListViewHeightBasedOnChildren();
         View root = binding.getRoot();
         return root;
     }
@@ -256,5 +257,27 @@ public class DisplayFragment extends Fragment implements EventListener<QuerySnap
             total += documentSnapshot.getLong("stars");
         }
         binding.rating.setRating((float)total / documentSnapshots.size());
+    }
+
+    public void setListViewHeightBasedOnChildren() {
+        ListAdapter listAdapter = binding.listView.getAdapter();if (listAdapter == null) return;
+        int desiredWidth = View.MeasureSpec.makeMeasureSpec(binding.listView.getWidth(),
+            View.MeasureSpec.UNSPECIFIED);int totalHeight = 0;
+        View view = null;for (int i = 0; i < listAdapter.getCount(); i++) {
+            view = listAdapter.getView(i, view, binding.listView);if (i == 0) view.setLayoutParams(new
+                    ViewGroup.LayoutParams(desiredWidth,
+                    ViewGroup.LayoutParams.WRAP_CONTENT));
+
+            view.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+            totalHeight += view.getMeasuredHeight();
+        }
+
+        ViewGroup.LayoutParams params = binding.listView.getLayoutParams();
+
+        params.height = totalHeight + (binding.listView.getDividerHeight() *
+                (listAdapter.getCount() - 1));
+
+        binding.listView.setLayoutParams(params);
+        binding.listView.requestLayout();
     }
 }

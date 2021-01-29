@@ -9,7 +9,7 @@
     android:orientation="vertical"
     tools:context=".ui.display.DisplayFragment">
 
-    <ScrollView android:id="@+id/ScrollViewID"
+    <androidx.core.widget.NestedScrollView android:id="@+id/ScrollViewID"
         android:layout_width="fill_parent"
         android:layout_height="match_parent">
 
@@ -212,7 +212,7 @@
 
     </LinearLayout>
 
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
     <!--    <ImageButton-->
     <!--        android:id="@+id/deezer"-->

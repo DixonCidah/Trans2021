@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".ui.display.SearchFragment">
+    tools:context=".ui.search.SearchFragment">
 
     <ScrollView android:id="@+id/ScrollViewID"
         android:layout_width="fill_parent"

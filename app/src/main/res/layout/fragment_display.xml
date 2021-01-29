@@ -124,7 +124,7 @@
                         tools:listitem="@layout/fragment_display_editions_list_item"/>
                     <!-- Buttons -->
                     <LinearLayout
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal">
                         <com.google.android.material.button.MaterialButton
@@ -140,8 +140,19 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/comments"
+                            android:layout_weight="1"
                             style="?attr/borderlessButtonStyle"
                             />
+                        <ImageButton
+                            android:id="@+id/button_fav"
+                            android:layout_gravity="bottom|end"
+                            android:layout_margin="16dp"
+                            android:layout_width="24dp"
+                            android:layout_height="24dp"
+                            android:tint="?attr/colorOnBackground"
+                            android:src="@drawable/button_like"
+                            android:background="?attr/selectableItemBackgroundBorderless" />
+
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
@@ -152,7 +163,7 @@
             android:id="@+id/cardSpotify"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="10dp"
+            app:cardCornerRadius="20dp"
             android:layout_margin="8dp"
             android:layout_gravity="bottom|center">
 
@@ -187,7 +198,7 @@
             android:id="@+id/cardDeezer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="10dp"
+            app:cardCornerRadius="20dp"
             android:layout_margin="8dp"
             android:layout_gravity="bottom|center">
 

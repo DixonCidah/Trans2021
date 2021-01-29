@@ -183,6 +183,11 @@ public class DisplayFragment extends Fragment implements EventListener<QuerySnap
         binding.artists.setText(artist.getArtistes());
         binding.country.setText(artist.getOrigine_pays1());
         String ville = artist.getOrigine_ville1();
+        binding.buttonFav.setSelected(artist.isFavorite());
+        binding.buttonFav.setOnClickListener(view -> {
+            artist.toggleFavorite();
+            binding.buttonFav.setSelected(artist.isFavorite());
+        });
 
         if(ville == null || ville.isEmpty()) binding.city.setVisibility(View.GONE);
         else binding.city.setText(ville);

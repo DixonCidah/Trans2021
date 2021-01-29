@@ -20,6 +20,7 @@ import java.util.List;
 public class SearchFragment extends Fragment{
     FragmentSearchBinding binding;
     List<Artist> artistList;
+    String msghint = "Cliquez pour selectionner l'année";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -46,10 +47,10 @@ public class SearchFragment extends Fragment{
         ArrayList<Artist> artistFiltres = new ArrayList<>();
 
         binding.searchButton.setOnClickListener(v -> {
-            Log.i("MainActivity","AAAA");
+            Log.i("MainActivity","AAAA"+binding.pickYear.getText()+binding.searchName.getText()+binding.originSearch.getText());
             Log.i("MainActivity", "TAILLE 1 !!! (/°q°/)"+String.valueOf(artistFiltres.size()));
 
-            if((binding.pickYear.getText() != null) && (binding.pickYear.getText().length() != 0) && !(binding.pickYear.getText().equals("@string/yearHint"))){
+            if((binding.pickYear.getText() != null) && (binding.pickYear.getText().length() != 0) && !(binding.pickYear.getText().equals(msghint))){
                 // Ajouter tous les artistes avec annee == searchYear
                 // Remplacer par un spinner avec les années ? (Possibilité de reprendre le code de Shervin)
                 Log.i("MainActivity","123" + binding.pickYear.getText());
@@ -69,8 +70,8 @@ public class SearchFragment extends Fragment{
                 ArtistsLocalService.setArtistListFiltre(artistFiltres);
             }
             Log.i("MainActivity", "TAILLE 4 !!! (/°w°/)"+String.valueOf(artistFiltres.size()));
-            //Mess
-            if(binding.originSearch.getText().length() == 0 && binding.originSearch.getText().length() == 0 && binding.pickYear.getText().equals("@string/yearHint")){
+
+            if((binding.originSearch.getText().length() == 0) && (binding.originSearch.getText().length() == 0 )&& (binding.pickYear.getText().equals(msghint))){
                 artistFiltres.addAll(ArtistsLocalService.getArtistList());
                 ArtistsLocalService.setArtistListFiltre(artistFiltres);
                 String ff = "Vous avez oubliez de mettre des filtres";

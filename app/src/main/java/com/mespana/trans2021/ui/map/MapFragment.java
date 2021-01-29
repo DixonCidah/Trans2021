@@ -15,7 +15,7 @@ import com.mespana.trans2021.BuildConfig;
 import com.mespana.trans2021.R;
 import com.mespana.trans2021.databinding.FragmentMapBinding;
 import com.mespana.trans2021.models.Artist;
-import com.mespana.trans2021.services.JsonParsingService;
+import com.mespana.trans2021.services.ArtistsLocalService;
 
 import org.jetbrains.annotations.NotNull;
 import org.osmdroid.api.IMapController;
@@ -120,7 +120,7 @@ public class MapFragment extends Fragment {
 
     private void createMarkersList() {
         items = new ArrayList<>();
-        for(Artist a : JsonParsingService.getArtistList()) {
+        for(Artist a : ArtistsLocalService.getArtistList()) {
             items.add(new OverlayItem(a.getRecordid(),
                     a.getArtistes(),
                     new GeoPoint(a.getGeo_point_2d_x(),a.getGeo_point_2d_y())));

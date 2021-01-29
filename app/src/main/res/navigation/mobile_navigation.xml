@@ -58,7 +58,11 @@
         android:id="@+id/navigation_profile"
         android:name="com.mespana.trans2021.ui.profile.ProfileFragment"
         android:label="fragment_profile"
-        tools:layout="@layout/fragment_profile" />
+        tools:layout="@layout/fragment_profile" >
+        <action
+            android:id="@+id/action_navigation_profile_to_displayFragment"
+            app:destination="@id/displayFragment" />
+    </fragment>
     <fragment
         android:id="@+id/login_fragment"
         android:name="com.mespana.trans2021.ui.profile.LoginFragment"

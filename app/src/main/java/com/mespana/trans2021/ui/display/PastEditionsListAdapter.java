@@ -9,6 +9,8 @@ import android.widget.TextView;
 import com.mespana.trans2021.R;
 import com.mespana.trans2021.models.Event;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 public class PastEditionsListAdapter extends BaseAdapter {
@@ -40,8 +42,8 @@ public class PastEditionsListAdapter extends BaseAdapter {
             convertView = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_display_editions_list_item, parent, false);
         }
         Event e = getItem(position);
-        // TODO rémi date
-        ((TextView)convertView.findViewById(R.id.date)).setText(e.getDate().toString());
+        SimpleDateFormat formater = new SimpleDateFormat("dd MMMM yyyy");
+        ((TextView)convertView.findViewById(R.id.date)).setText(formater.format(e.getDate()));
         ((TextView)convertView.findViewById(R.id.place)).setText(e.getSalle());
         return convertView;
     }

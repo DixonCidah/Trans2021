@@ -2,6 +2,8 @@ package com.mespana.trans2021.models;
 
 import android.graphics.Bitmap;
 
+import com.mespana.trans2021.services.ArtistsLocalService;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -33,6 +35,7 @@ public class Artist {
     private Bitmap loadedImage;
     private boolean triedToLoadImage;
     private List<Event> eventList;
+    private boolean favorite;
 
     public Artist(JSONObject jsonObject) {
         triedToLoadImage = false;
@@ -65,7 +68,7 @@ public class Artist {
                 String  keyDate = "1ere_date_timestamp",
                         keySalle = "1ere_salle";
                 while(fields.has(keyDate) && fields.has(keySalle)){
-                    this.eventList.add(new Event(i, fields.getString(keySalle), new Date(fields.getLong(keyDate))));
+                    this.eventList.add(new Event(i, fields.getString(keySalle), new Date(fields.getLong(keyDate) * 1000)));
                     i++;
                     keyDate = i+"eme_date_timestamp";
                     keySalle = i+"eme_salle";
@@ -173,4 +176,20 @@ public class Artist {
         this.eventList = eventList;
     }
 
+    public void toggleFavorite(){
+        this.favorite = !this.favorite;
+        if(this.favorite){
+            ArtistsLocalService.addFavorite(this);
+        }else{
+            ArtistsLocalService.removeFavorite(this);
+        }
+    }
+
+    public void setFavorite(boolean favorite) {
+        this.favorite = favorite;
+    }
+
+    public boolean isFavorite() {
+        return this.favorite;
+    }
 }

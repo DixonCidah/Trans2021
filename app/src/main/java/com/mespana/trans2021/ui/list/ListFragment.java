@@ -5,7 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.mespana.trans2021.databinding.FragmentListBinding;
-import com.mespana.trans2021.services.JsonParsingService;
+import com.mespana.trans2021.services.ArtistsLocalService;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -24,7 +24,7 @@ public class ListFragment extends Fragment {
             @NonNull LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
         binding = FragmentListBinding.inflate(inflater, container, false);
-        binding.list.setAdapter(new ArtistsRecyclerViewAdapter(getActivity(), JsonParsingService.getArtistList()));
+        binding.list.setAdapter(new ArtistsRecyclerViewAdapter(getActivity(), ArtistsLocalService.getArtistList()));
         View root = binding.getRoot();
         return root;
     }

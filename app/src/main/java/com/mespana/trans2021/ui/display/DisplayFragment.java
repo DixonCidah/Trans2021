@@ -39,7 +39,6 @@ import com.mespana.trans2021.models.Note;
 import com.mespana.trans2021.services.FirebaseService;
 import com.mespana.trans2021.services.JsonParsingService;
 import com.mespana.trans2021.services.SpotifyService;
-import com.mespana.trans2021.services.handlers.ImageHandler;
 import com.spotify.android.appremote.api.ConnectionParams;
 import com.spotify.android.appremote.api.Connector;
 import com.spotify.android.appremote.api.SpotifyAppRemote;
@@ -177,8 +176,6 @@ public class DisplayFragment extends Fragment implements EventListener<QuerySnap
                 );
             }
         }
-
-
         binding.rate.setOnClickListener(view -> showDialog());
         View root = binding.getRoot();
         return root;

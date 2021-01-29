@@ -3,7 +3,6 @@ package com.mespana.trans2021.ui.display;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -14,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.ListAdapter;
-import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.Toast;
 
@@ -36,7 +34,6 @@ import com.mespana.trans2021.MainActivity;
 import com.mespana.trans2021.R;
 import com.mespana.trans2021.databinding.FragmentDisplayBinding;
 import com.mespana.trans2021.models.Artist;
-import com.mespana.trans2021.models.Event;
 import com.mespana.trans2021.models.Note;
 import com.mespana.trans2021.services.ArtistsLocalService;
 import com.mespana.trans2021.services.FirebaseService;
@@ -49,8 +46,9 @@ import java.util.ArrayList;
 
 public class DisplayFragment extends Fragment implements EventListener<QuerySnapshot> {
 
-    FragmentDisplayBinding binding;
-    String recordId;
+    private FragmentDisplayBinding binding;
+    private String recordId;
+    private Artist artist;
 
     private static final String CLIENT_ID = "4fb4752c0855467ba1764236a40569b8";
     private static final String REDIRECT_URI = "http://com.mespana.trans2021/callback";
@@ -97,26 +95,35 @@ public class DisplayFragment extends Fragment implements EventListener<QuerySnap
     public View onCreateView(
             @NonNull LayoutInflater inflater, ViewGroup container,
             Bundle savedInstanceState) {
+
         SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
         Context context = getContext();
+
         recordId = sharedPref.getString(context.getString(R.string.shared_prefs_artist_rec_id), context.getString(R.string.unknown_artists));
-        Artist artist = ArtistsLocalService.getArtistFromRecordId(recordId);
+        artist = ArtistsLocalService.getArtistFromRecordId(recordId);
         binding = FragmentDisplayBinding.inflate(inflater, container, false);
+
         if(artist == null) {
             Toast.makeText(getContext(), R.string.artist_does_not_exist, Toast.LENGTH_SHORT).show();
             Navigation.findNavController(getView()).navigate(R.id.action_displayFragment_pop);
         }
+
         binding.comments.setOnClickListener(view -> Navigation.findNavController(view).navigate(R.id.action_displayFragment_to_commentsFragment));
         FirebaseService.getAverageNoteOfArtist(recordId).addSnapshotListener(this);
-        binding.edition.setText(artist.getEdition());
-        binding.listView.setAdapter(new PastEditionsListAdapter(artist.getEventList()));
-        binding.artists.setText(artist.getArtistes());
-        binding.country.setText(artist.getOrigine_pays1());
-        String ville = artist.getOrigine_ville1();
-        if(ville == null || ville.isEmpty()) binding.city.setVisibility(View.GONE);
-        else binding.city.setText(ville);
+
+        View root = binding.getRoot();
+        return root;
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState){
+        setView();
+        setSpotify();
+        setDeezer();
+    }
+
+    private void setDeezer() {
         String deezer = artist.getDeezer();
-        String spotify = artist.getSpotify();
 
         if(deezer.isEmpty()) {
             binding.deezer.setVisibility(View.GONE);
@@ -133,6 +140,10 @@ public class DisplayFragment extends Fragment implements EventListener<QuerySnap
                 }
             });
         }
+    }
+
+    private void setSpotify() {
+        String spotify = artist.getSpotify();
 
         if(spotify.isEmpty()) {
             binding.cardSpotify.setVisibility(View.GONE);
@@ -141,7 +152,7 @@ public class DisplayFragment extends Fragment implements EventListener<QuerySnap
                 if(binding.spotifyPlay.getTag().equals("pause")) {
                     try {
                         mSpotifyAppRemote.getPlayerApi().play(spotify);
-                        binding.spotifyPlay.setBackground(context.getDrawable(R.drawable.ic_pause));
+                        binding.spotifyPlay.setBackground(requireContext().getDrawable(R.drawable.ic_pause));
                         binding.spotifyPlay.setTag("play");
                     } catch (Exception e) {
                         Toast.makeText(getContext(), R.string.can_t_open_spotify, Toast.LENGTH_SHORT).show();
@@ -158,12 +169,23 @@ public class DisplayFragment extends Fragment implements EventListener<QuerySnap
                     }
                 } else {
                     mSpotifyAppRemote.getPlayerApi().pause();
-                    binding.spotifyPlay.setBackground(context.getDrawable(R.drawable.ic_play));
+                    binding.spotifyPlay.setBackground(requireContext().getDrawable(R.drawable.ic_play));
                     binding.spotifyPlay.setTag("pause");
                 }
 
             });
         }
+    }
+
+    private void setView() {
+        binding.listView.setAdapter(new PastEditionsListAdapter(artist.getEventList()));
+        binding.edition.setText(artist.getEdition());
+        binding.artists.setText(artist.getArtistes());
+        binding.country.setText(artist.getOrigine_pays1());
+        String ville = artist.getOrigine_ville1();
+
+        if(ville == null || ville.isEmpty()) binding.city.setVisibility(View.GONE);
+        else binding.city.setText(ville);
 
         // si pas d'image récupérée, on met l'image de base (ic_profile)
         //binding.roundedImage.setImageDrawable();
@@ -178,8 +200,6 @@ public class DisplayFragment extends Fragment implements EventListener<QuerySnap
         }
         binding.rate.setOnClickListener(view -> showDialog());
         setListViewHeightBasedOnChildren();
-        View root = binding.getRoot();
-        return root;
     }
 
     private void showDialog() {

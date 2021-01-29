@@ -7,6 +7,7 @@ import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -21,6 +22,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.mespana.trans2021.databinding.ActivityMainBinding;
 import com.mespana.trans2021.services.JsonParsingService;
+import com.mespana.trans2021.ui.profile.LoginFragment;
 
 import java.util.Arrays;
 import java.util.List;
@@ -30,6 +32,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int RC_SIGN_IN = 35000,
             RC_SIGN_OUT = 35001;
     private ActivityMainBinding binding;
+    private NavController navController;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,12 +43,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         // gestion bottom navigation
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupWithNavController(binding.navView, navController);
 
     }
 
-    public void signOut() {
+    public void signOut(Runnable signedOut) {
         new MaterialAlertDialogBuilder(this)
                 .setTitle(getResources().getString(R.string.signout_dialog_title))
                 .setMessage(getResources().getString(R.string.signout_dialog_message))
@@ -54,6 +57,7 @@ public class MainActivity extends AppCompatActivity {
                             .signOut(this)
                             .addOnCompleteListener(task -> {
                                 // TODO enlever la photo du user dans la bottom bar
+                                signedOut.run();
                             });
                 })
                 .setNegativeButton(R.string.cancel, (dialogInterface, i) -> {
@@ -82,14 +86,18 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        // TODO rémi
         if (requestCode == RC_SIGN_IN) {
             IdpResponse response = IdpResponse.fromResultIntent(data);
             FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
             if (resultCode == RESULT_OK && user != null) {
                 // Successfully signed in
                 // TODO photo du compte dans la navbar
+                // TODO reload le fragment
+                Fragment navHostFragment = getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment);
+                Fragment currentFragment = navHostFragment == null ? null : navHostFragment.getChildFragmentManager().getFragments().get(0);
+                if (currentFragment instanceof LoginFragment){
+                    navController.popBackStack();
+                }
             } else {
                 // Sign in failed. If response is null the user canceled the
                 // sign-in flow using the back button. Otherwise check

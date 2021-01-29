@@ -40,4 +40,5 @@
     <string name="originHint">Entrez le Pays d\'origine de l\'artiste</string>
     <string name="yearHint">Cliquez pour selectionner l\'année</string>
     <string name="nameHint">Entrez le nom de l\'artiste</string>
+    <string name="please_login">Veuillez vous connecter afin d\'accéder à toutes les fonctionnalités de l\'application.</string>
 </resources>

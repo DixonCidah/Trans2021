@@ -4,7 +4,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
 import android.widget.Toast;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
@@ -41,49 +40,40 @@ public class SearchFragment extends Fragment{
     }
 
     private void setSearchButtonAction() {
-        ArrayList<Artist> artistFiltres = new ArrayList<>();
 
         binding.searchButton.setOnClickListener(v -> {
-            Log.i("MainActivity","AAAA"+binding.pickYear.getText()+binding.searchName.getText()+binding.originSearch.getText());
-            Log.i("MainActivity", "TAILLE 1 !!! (/°q°/)"+String.valueOf(artistFiltres.size()));
 
             if((binding.pickYear.getText() != null) && (binding.pickYear.getText().length() != 0) && !(binding.pickYear.getText().equals(msghint))){
                 // Ajouter tous les artistes avec annee == searchYear
                 // Remplacer par un spinner avec les années ? (Possibilité de reprendre le code de Shervin)
-                Log.i("MainActivity","123" + binding.pickYear.getText());
-                artistFiltres.addAll(ArtistsLocalService.getArtistFromYear(""+binding.pickYear.getText()));
-                ArtistsLocalService.setArtistListFiltre(artistFiltres);
+                ArtistsLocalService.getArtistFromYear(""+binding.pickYear.getText());
+                //ArtistsLocalService.setArtistListFiltre(artistFiltres);
             }
             if((binding.originSearch.getText() != null) && (binding.originSearch.getText().length() != 0) ) {
                 // Ajouter tous les artistes avec originSearch == originSearch
-                Log.i("MainActivity","234"+binding.originSearch.getText());
-                artistFiltres.addAll(ArtistsLocalService.getArtistFromPlace(""+binding.originSearch.getText()));
-                ArtistsLocalService.setArtistListFiltre(artistFiltres);
+                ArtistsLocalService.getArtistFromPlace(""+binding.originSearch.getText());
+                //ArtistsLocalService.setArtistListFiltre(artistFiltres);
             }
             if((binding.searchName.getText() != null) && (binding.searchName.getText().length() != 0 )) {
                 //Ajouter tous les artistes avec searchName == searchName
-                Log.i("MainActivity","456"+binding.searchName.getText());
-                artistFiltres.addAll(ArtistsLocalService.getArtistFromName(""+binding.searchName.getText()));
-                ArtistsLocalService.setArtistListFiltre(artistFiltres);
+                ArtistsLocalService.getArtistFromName(""+binding.searchName.getText());
+               // ArtistsLocalService.setArtistListFiltre(artistFiltres);
             }
-            Log.i("MainActivity", "TAILLE 4 !!! (/°w°/)"+String.valueOf(artistFiltres.size()));
 
-            if((binding.originSearch.getText().length() == 0) && (binding.originSearch.getText().length() == 0 )&& (binding.pickYear.getText().equals(msghint))){
-                artistFiltres.addAll(ArtistsLocalService.getArtistList());
-                ArtistsLocalService.setArtistListFiltre(artistFiltres);
+
+            if((binding.searchName.getText().length() == 0) && (binding.originSearch.getText().length() == 0 ) && (binding.pickYear.getText().equals(msghint))){
                 String ff = "Vous avez oubliez de mettre des filtres";
                 Toast.makeText(this.getContext(), ff ,Toast.LENGTH_SHORT).show();
             }
-            else if(artistFiltres.size() == 0){
+            else if(ArtistsLocalService.getArtistListFiltre().size() ==  0){
                 String ff = "0 groupes ou artistes avec ces filtres";
                 Toast.makeText(this.getContext(), ff ,Toast.LENGTH_SHORT).show();
             }
 
             // Afficher la liste des artistes trouvés via ListFragment.
-            Log.i("MainActivity", "TAILLE 2 !!! (/°q°/)"+String.valueOf(artistFiltres.size()));
 
-            for (Artist a : artistFiltres) {
-                Log.i("MainActivity","ANNEE/YEAR : "+a.getAnnee()+a.getArtistes()+a.getOrigine_pays1());
+            for (Artist a : ArtistsLocalService.getArtistListFiltre()) {
+                Log.i("MainActivity","ANNEE/YEAR : "+a.getAnnee()+" Artiste : "+a.getArtistes()+" Origine : "+a.getOrigine_pays1());
             }
 
             Navigation.findNavController(v).navigate(R.id.action_navigation_search_to_navigation_list);
@@ -112,4 +102,5 @@ public class SearchFragment extends Fragment{
     }
 
 }
+
 

@@ -4,4 +4,5 @@ import android.graphics.Bitmap;
 
 public interface ImageHandler {
     void onSuccess(Bitmap bitmap);
+    void onFailure();
 }

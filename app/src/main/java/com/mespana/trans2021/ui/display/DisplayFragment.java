@@ -34,11 +34,11 @@ import com.mespana.trans2021.MainActivity;
 import com.mespana.trans2021.R;
 import com.mespana.trans2021.databinding.FragmentDisplayBinding;
 import com.mespana.trans2021.models.Artist;
-import com.mespana.trans2021.models.Event;
 import com.mespana.trans2021.models.Note;
 import com.mespana.trans2021.services.ArtistsLocalService;
 import com.mespana.trans2021.services.FirebaseService;
-import com.mespana.trans2021.services.SpotifyService;
+import com.mespana.trans2021.services.RemotePictureService;
+import com.mespana.trans2021.services.handlers.ImageHandler;
 import com.spotify.android.appremote.api.ConnectionParams;
 import com.spotify.android.appremote.api.Connector;
 import com.spotify.android.appremote.api.SpotifyAppRemote;
@@ -171,8 +171,15 @@ public class DisplayFragment extends Fragment implements EventListener<QuerySnap
             if (artist.getLoadedImage() != null){
                 binding.image.setImageBitmap(artist.getLoadedImage());
             } else {
-                SpotifyService.getPictureFromSpotifyAlbumId(artist,
-                        bitmap -> getActivity().runOnUiThread(() -> binding.image.setImageBitmap(bitmap))
+                RemotePictureService.getPictureFromSpotifyAlbumId(artist, new ImageHandler() {
+                            @Override
+                            public void onSuccess(Bitmap bitmap) {
+                                getActivity().runOnUiThread(() -> binding.image.setImageBitmap(bitmap));
+                            }
+
+                            @Override
+                            public void onFailure() { }
+                        }
                 );
             }
         }

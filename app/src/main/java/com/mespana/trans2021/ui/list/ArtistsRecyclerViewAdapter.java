@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,14 +11,13 @@ import android.view.ViewGroup;
 import com.mespana.trans2021.R;
 import com.mespana.trans2021.databinding.FragmentListItemBinding;
 import com.mespana.trans2021.models.Artist;
-import com.mespana.trans2021.services.SpotifyService;
+import com.mespana.trans2021.services.RemotePictureService;
 import com.mespana.trans2021.services.handlers.ImageHandler;
 
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
 
-import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -85,14 +83,15 @@ public class ArtistsRecyclerViewAdapter  extends RecyclerView.Adapter<ArtistsRec
             }
             if (artist.getLoadedImage() == null) {
                 if(!artist.isTriedToLoadImage()) {
-                    SpotifyService.getPictureFromSpotifyAlbumId(artist,
-                            bitmap -> activity.runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    binding.cover.setImageBitmap(bitmap);
-                                }
-                            })
-                    );
+                    RemotePictureService.getPictureFromSpotifyAlbumId(artist, new ImageHandler() {
+                        @Override
+                        public void onSuccess(Bitmap bitmap) {
+                            activity.runOnUiThread(() -> binding.cover.setImageBitmap(bitmap));
+                        }
+
+                        @Override
+                        public void onFailure() { }
+                    });
                 }
             }else {
                 binding.cover.setImageBitmap(artist.getLoadedImage());

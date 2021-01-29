@@ -3,6 +3,7 @@ package com.mespana.trans2021.ui.profile;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,10 +12,10 @@ import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.mespana.trans2021.R;
-import com.mespana.trans2021.databinding.FragmentListItemBinding;
 import com.mespana.trans2021.databinding.FragmentProfileFaveArtistsBinding;
 import com.mespana.trans2021.models.Artist;
-import com.mespana.trans2021.services.SpotifyService;
+import com.mespana.trans2021.services.RemotePictureService;
+import com.mespana.trans2021.services.handlers.ImageHandler;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -71,13 +72,14 @@ public class FavoriteArtistsRecyclerViewAdapter extends RecyclerView.Adapter<Fav
             binding.country.setText(artist.getOrigine_pays1());
             if (artist.getLoadedImage() == null) {
                 if(!artist.isTriedToLoadImage()) {
-                    SpotifyService.getPictureFromSpotifyAlbumId(artist,
-                            bitmap -> activity.runOnUiThread(new Runnable() {
+                    RemotePictureService.getPictureFromSpotifyAlbumId(artist, new ImageHandler() {
                                 @Override
-                                public void run() {
-                                    binding.artistsImg.setImageBitmap(bitmap);
+                                public void onSuccess(Bitmap bitmap) {
+                                    activity.runOnUiThread(() -> binding.artistsImg.setImageBitmap(bitmap));
                                 }
-                            })
+                                @Override
+                                public void onFailure() { }
+                            }
                     );
                 }
             }else {

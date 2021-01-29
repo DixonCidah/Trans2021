@@ -18,7 +18,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class SpotifyService {
+public class RemotePictureService {
 
    static OkHttpClient client = new OkHttpClient();
 
@@ -42,7 +42,7 @@ public class SpotifyService {
                      client.newCall(requestImage).enqueue(new Callback() {
                         @Override
                         public void onResponse(@NotNull Call call, @NotNull Response responseImage) throws IOException {
-                           if (response.isSuccessful()) {
+                           if (responseImage.isSuccessful()) {
                               Bitmap bitmap = BitmapFactory.decodeStream(responseImage.body().byteStream());
                               artist.setLoadedImage(bitmap);
                               imageHandler.onSuccess(bitmap);
@@ -64,5 +64,37 @@ public class SpotifyService {
          public void onFailure(Call call, IOException e) {
          }
       });
+   }
+
+   public static void getImageFromUrl(String url, ImageHandler imageHandler){
+      try {
+         Request requestImage = new Request.Builder()
+                 .url(url)
+                 .build();
+         client.newCall(requestImage).enqueue(new Callback() {
+            @Override
+            public void onResponse(@NotNull Call call, @NotNull Response responseImage) throws IOException {
+               if (responseImage.isSuccessful()) {
+                  Bitmap bitmap = BitmapFactory.decodeStream(responseImage.body().byteStream());
+                  if (bitmap != null) {
+                     imageHandler.onSuccess(bitmap);
+                  }
+                  else{
+                     imageHandler.onFailure();
+                  }
+               }
+               else {
+                  imageHandler.onFailure();
+               }
+            }
+
+            @Override
+            public void onFailure(@NotNull Call call, @NotNull IOException e) {
+               imageHandler.onFailure();
+            }
+         });
+      }catch (Exception e){
+         imageHandler.onFailure();
+      }
    }
 }

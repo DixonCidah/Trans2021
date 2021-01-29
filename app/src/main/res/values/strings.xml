@@ -41,4 +41,7 @@
     <string name="please_login">Veuillez vous connecter afin d\'accéder à toutes les fonctionnalités de l\'application.</string>
     <string name="fave_artists">Artistes préférés</string>
     <string name="log_out">déconnexion 😔</string>
+    <string name="url_photo">URL de votre photo de profil</string>
+    <string name="modif_photo">Modification de photo</string>
+    <string name="error_url_photo">L\'URL ne renvoie pas de photo</string>
 </resources>

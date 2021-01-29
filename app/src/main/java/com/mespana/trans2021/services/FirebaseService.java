@@ -1,5 +1,9 @@
 package com.mespana.trans2021.services;
 
+import android.net.Uri;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.mespana.trans2021.models.Comment;
@@ -25,5 +29,9 @@ public class FirebaseService {
    public static void postNoteOfArtist(Note note) {
       FirebaseFirestore firestore = FirebaseFirestore.getInstance();
       firestore.collection("notes" + note.getRecordId()).document(note.getUserId()).set(note);
+   }
+
+   public static void modifyUserPhoto(String photoUrl){
+      FirebaseAuth.getInstance().getCurrentUser().updateProfile(new UserProfileChangeRequest.Builder().setPhotoUri(Uri.parse(photoUrl)).build());
    }
 }

@@ -68,7 +68,7 @@ public class Artist {
                 String  keyDate = "1ere_date_timestamp",
                         keySalle = "1ere_salle";
                 while(fields.has(keyDate) && fields.has(keySalle)){
-                    this.eventList.add(new Event(i, fields.getString(keySalle), new Date(fields.getLong(keyDate))));
+                    this.eventList.add(new Event(i, fields.getString(keySalle), new Date(fields.getLong(keyDate) * 1000)));
                     i++;
                     keyDate = i+"eme_date_timestamp";
                     keySalle = i+"eme_salle";

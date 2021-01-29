@@ -1,7 +1,10 @@
 package com.mespana.trans2021.ui.display;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,6 +13,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.RatingBar;
 import android.widget.Toast;
 
@@ -31,9 +36,10 @@ import com.mespana.trans2021.MainActivity;
 import com.mespana.trans2021.R;
 import com.mespana.trans2021.databinding.FragmentDisplayBinding;
 import com.mespana.trans2021.models.Artist;
+import com.mespana.trans2021.models.Event;
 import com.mespana.trans2021.models.Note;
-import com.mespana.trans2021.services.FirebaseService;
 import com.mespana.trans2021.services.ArtistsLocalService;
+import com.mespana.trans2021.services.FirebaseService;
 import com.mespana.trans2021.services.SpotifyService;
 import com.spotify.android.appremote.api.ConnectionParams;
 import com.spotify.android.appremote.api.Connector;
@@ -78,8 +84,12 @@ public class DisplayFragment extends Fragment implements EventListener<QuerySnap
                         // Something went wrong when attempting to connect! Handle errors here
                     }
                 });
+    }
 
-
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        SpotifyAppRemote.disconnect(mSpotifyAppRemote);
     }
 
     @RequiresApi(api = Build.VERSION_CODES.O)
@@ -107,7 +117,7 @@ public class DisplayFragment extends Fragment implements EventListener<QuerySnap
         else binding.city.setText(ville);
         String deezer = artist.getDeezer();
         String spotify = artist.getSpotify();
-/*
+
         if(deezer.isEmpty()) {
             binding.deezer.setVisibility(View.GONE);
         } else {
@@ -122,42 +132,52 @@ public class DisplayFragment extends Fragment implements EventListener<QuerySnap
                     Toast.makeText(getContext(), R.string.can_t_open_deezer, Toast.LENGTH_SHORT).show();
                 }
             });
-        }*/
+        }
 
         if(spotify.isEmpty()) {
             binding.cardSpotify.setVisibility(View.GONE);
         } else {
             binding.spotifyPlay.setOnClickListener(v -> {
-                try {
-                    mSpotifyAppRemote.getPlayerApi().play(spotify);
-                } catch (Exception e) {
-                    Toast.makeText(getContext(), R.string.can_t_open_spotify, Toast.LENGTH_SHORT).show();
-                }
-            });
-            binding.spotifyPause.setOnClickListener(v -> {
-                try {
+                if(binding.spotifyPlay.getTag().equals("pause")) {
+                    try {
+                        mSpotifyAppRemote.getPlayerApi().play(spotify);
+                        binding.spotifyPlay.setBackground(context.getDrawable(R.drawable.ic_pause));
+                        binding.spotifyPlay.setTag("play");
+                    } catch (Exception e) {
+                        Toast.makeText(getContext(), R.string.can_t_open_spotify, Toast.LENGTH_SHORT).show();
+                        try {
+                            String url = getString(R.string.url_spotify);
+                            String[] tokens = spotify.split(":");
+                            url+=tokens[1]+"/"+tokens[2];
+                            Intent i = new Intent(Intent.ACTION_VIEW);
+                            i.setData(Uri.parse(url));
+                            startActivity(i);
+                        } catch (Exception e2) {
+                            Toast.makeText(getContext(), R.string.can_t_open_spotify, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                } else {
                     mSpotifyAppRemote.getPlayerApi().pause();
-                } catch (Exception e) {
-                    Toast.makeText(getContext(), R.string.can_t_open_spotify, Toast.LENGTH_SHORT).show();
+                    binding.spotifyPlay.setBackground(context.getDrawable(R.drawable.ic_play));
+                    binding.spotifyPlay.setTag("pause");
                 }
+
             });
         }
-
-
-
-
 
         // si pas d'image récupérée, on met l'image de base (ic_profile)
         //binding.roundedImage.setImageDrawable();
-        if(artist.isTriedToLoadImage()) binding.image.setImageBitmap(artist.getLoadedImage());
-        if (artist.getLoadedImage() != null){
-            binding.image.setImageBitmap(artist.getLoadedImage());
-        }else{
-            SpotifyService.getPictureFromSpotifyAlbumId(artist,
-                    bitmap -> getActivity().runOnUiThread(() -> binding.image.setImageBitmap(bitmap))
-            );
+        if(artist.isTriedToLoadImage()) {
+            if (artist.getLoadedImage() != null){
+                binding.image.setImageBitmap(artist.getLoadedImage());
+            } else {
+                SpotifyService.getPictureFromSpotifyAlbumId(artist,
+                        bitmap -> getActivity().runOnUiThread(() -> binding.image.setImageBitmap(bitmap))
+                );
+            }
         }
         binding.rate.setOnClickListener(view -> showDialog());
+        setListViewHeightBasedOnChildren();
         View root = binding.getRoot();
         return root;
     }
@@ -237,5 +257,27 @@ public class DisplayFragment extends Fragment implements EventListener<QuerySnap
             total += documentSnapshot.getLong("stars");
         }
         binding.rating.setRating((float)total / documentSnapshots.size());
+    }
+
+    public void setListViewHeightBasedOnChildren() {
+        ListAdapter listAdapter = binding.listView.getAdapter();if (listAdapter == null) return;
+        int desiredWidth = View.MeasureSpec.makeMeasureSpec(binding.listView.getWidth(),
+            View.MeasureSpec.UNSPECIFIED);int totalHeight = 0;
+        View view = null;for (int i = 0; i < listAdapter.getCount(); i++) {
+            view = listAdapter.getView(i, view, binding.listView);if (i == 0) view.setLayoutParams(new
+                    ViewGroup.LayoutParams(desiredWidth,
+                    ViewGroup.LayoutParams.WRAP_CONTENT));
+
+            view.measure(desiredWidth, View.MeasureSpec.UNSPECIFIED);
+            totalHeight += view.getMeasuredHeight();
+        }
+
+        ViewGroup.LayoutParams params = binding.listView.getLayoutParams();
+
+        params.height = totalHeight + (binding.listView.getDividerHeight() *
+                (listAdapter.getCount() - 1));
+
+        binding.listView.setLayoutParams(params);
+        binding.listView.requestLayout();
     }
 }

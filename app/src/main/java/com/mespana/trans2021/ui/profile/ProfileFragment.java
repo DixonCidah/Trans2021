@@ -19,8 +19,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.mespana.trans2021.MainActivity;
 import com.mespana.trans2021.R;
 import com.mespana.trans2021.databinding.FragmentProfileBinding;
-import com.mespana.trans2021.services.JsonParsingService;
-import com.mespana.trans2021.ui.list.ArtistsRecyclerViewAdapter;
+import com.mespana.trans2021.services.ArtistsLocalService;
 
 public class ProfileFragment extends Fragment {
 
@@ -47,7 +46,7 @@ public class ProfileFragment extends Fragment {
             // TODO change profile image?
         });
         //binding.roundedimage.setImageBitmap(); // TODO replace with Uri
-        binding.list.setAdapter(new FavoriteArtistsRecyclerViewAdapter(getActivity(), JsonParsingService.getArtistList()/*TODO retrieve list through sharedPrefs*/));
+        binding.list.setAdapter(new FavoriteArtistsRecyclerViewAdapter(getActivity(), ArtistsLocalService.getArtistList()/*TODO retrieve list through sharedPrefs*/));
 
         return this.binding.getRoot();
     }

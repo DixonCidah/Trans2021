@@ -28,15 +28,12 @@ public class SearchFragment extends Fragment{
         super.onCreate(savedInstanceState);
         binding = FragmentSearchBinding.inflate(inflater,container,false);
         artistList = ArtistsLocalService.getArtistList();
-        binding.countryChip.setOnCheckedChangeListener((buttonView, isChecked) -> {
-
-        });
-        binding.nameChip.setOnCheckedChangeListener((buttonView, isChecked) -> {
-
-        });
-        binding.yearChip.setOnCheckedChangeListener((buttonView, isChecked) -> {
-
-        });
+        binding.countryChip.setCheckedIconVisible(false);
+        binding.nameChip.setCheckedIconVisible(false);
+        binding.yearChip.setCheckedIconVisible(false);
+        binding.countryChip.setOnCheckedChangeListener((buttonView, isChecked) -> binding.countryTextField.setEnabled(isChecked));
+        binding.nameChip.setOnCheckedChangeListener((buttonView, isChecked) -> binding.textField.setEnabled(isChecked));
+        binding.yearChip.setOnCheckedChangeListener((buttonView, isChecked) -> binding.pickYear.setClickable(isChecked));
         View root = binding.getRoot();
         chooseYearOnly();
         setSearchButtonAction();

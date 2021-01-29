@@ -59,16 +59,19 @@
                         <!-- Chips can be declared here, or added dynamically. -->
                         <com.google.android.material.chip.Chip
                             android:id="@+id/name_chip"
+                            android:checkable="true"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/search_name"/>
                         <com.google.android.material.chip.Chip
                             android:id="@+id/year_chip"
+                            android:checkable="true"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/search_year"/>
                         <com.google.android.material.chip.Chip
                             android:id="@+id/country_chip"
+                            android:checkable="true"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="@string/search_origin"/>
@@ -160,6 +163,7 @@
                             android:textAppearance="?attr/textAppearanceOverline"/>
 
                         <com.google.android.material.textfield.TextInputLayout
+                            android:id="@+id/country_text_field"
                             android:layout_width="300dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"

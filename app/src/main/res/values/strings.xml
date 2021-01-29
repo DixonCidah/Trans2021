@@ -45,4 +45,6 @@
     <string name="url_photo">URL de votre photo de profil</string>
     <string name="modif_photo">Modification de photo</string>
     <string name="error_url_photo">L\'URL ne renvoie pas de photo</string>
+    <string name="no_filter">Vous n\'avez pas mis de filtre.</string>
+    <string name="filter_no_match">Nous n\'avons trouvé aucun groupe ou artiste avec ces filtres.</string>
 </resources>

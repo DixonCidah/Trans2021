@@ -30,6 +30,9 @@ public class SearchFragment extends Fragment{
         binding.countryChip.setCheckedIconVisible(false);
         binding.nameChip.setCheckedIconVisible(false);
         binding.yearChip.setCheckedIconVisible(false);
+        binding.countryTextField.setEnabled(binding.countryChip.isChecked());
+        binding.textField.setEnabled(binding.nameChip.isChecked());
+        binding.pickYear.setClickable(binding.yearChip.isChecked());
         binding.countryChip.setOnCheckedChangeListener((buttonView, isChecked) -> binding.countryTextField.setEnabled(isChecked));
         binding.nameChip.setOnCheckedChangeListener((buttonView, isChecked) -> binding.textField.setEnabled(isChecked));
         binding.yearChip.setOnCheckedChangeListener((buttonView, isChecked) -> binding.pickYear.setClickable(isChecked));
@@ -40,9 +43,7 @@ public class SearchFragment extends Fragment{
     }
 
     private void setSearchButtonAction() {
-
         binding.searchButton.setOnClickListener(v -> {
-
             if((binding.pickYear.getText() != null) && (binding.pickYear.getText().length() != 0) && !(binding.pickYear.getText().equals(msghint))){
                 // Ajouter tous les artistes avec annee == searchYear
                 // Remplacer par un spinner avec les années ? (Possibilité de reprendre le code de Shervin)
@@ -60,14 +61,11 @@ public class SearchFragment extends Fragment{
                // ArtistsLocalService.setArtistListFiltre(artistFiltres);
             }
 
-
             if((binding.searchName.getText().length() == 0) && (binding.originSearch.getText().length() == 0 ) && (binding.pickYear.getText().equals(msghint))){
-                String ff = "Vous avez oubliez de mettre des filtres";
-                Toast.makeText(this.getContext(), ff ,Toast.LENGTH_SHORT).show();
+                Toast.makeText(this.getContext(), getString(R.string.no_filter) ,Toast.LENGTH_SHORT).show();
             }
             else if(ArtistsLocalService.getArtistListFiltre().size() ==  0){
-                String ff = "0 groupes ou artistes avec ces filtres";
-                Toast.makeText(this.getContext(), ff ,Toast.LENGTH_SHORT).show();
+                Toast.makeText(this.getContext(), getString(R.string.filter_no_match) ,Toast.LENGTH_SHORT).show();
             }
 
             // Afficher la liste des artistes trouvés via ListFragment.

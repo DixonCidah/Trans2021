@@ -21,6 +21,9 @@
         <action
             android:id="@+id/action_navigation_search_to_displayFragment"
             app:destination="@id/displayFragment" />
+        <action
+            android:id="@+id/action_navigation_search_to_navigation_list"
+            app:destination="@id/navigation_list" />
     </fragment>
 
     <fragment

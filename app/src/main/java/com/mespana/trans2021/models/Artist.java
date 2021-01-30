@@ -9,6 +9,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -183,6 +184,17 @@ public class Artist {
         }else{
             ArtistsLocalService.removeFavorite(this);
         }
+    }
+
+    public boolean hasParticipatedThisYear(String year){
+        Calendar calendar = Calendar.getInstance();
+        for (Event event : eventList){
+            calendar.setTime(event.getDate());
+            if (calendar.get(Calendar.YEAR) == Integer.parseInt(year)){
+                return true;
+            }
+        }
+        return false;
     }
 
     public void setFavorite(boolean favorite) {

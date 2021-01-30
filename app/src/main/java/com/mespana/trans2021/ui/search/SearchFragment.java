@@ -20,7 +20,6 @@ import java.util.List;
 public class SearchFragment extends Fragment{
     FragmentSearchBinding binding;
     List<Artist> artistList;
-    String msghint = "Cliquez pour selectionner l'année";
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -55,9 +54,9 @@ public class SearchFragment extends Fragment{
     private void setSearchButtonAction() {
         binding.searchButton.setOnClickListener(v -> {
             ArtistsLocalService.resetFiltres();
-            if((binding.pickYear.getText() != null) && (binding.pickYear.getText().length() != 0) && !(binding.pickYear.getText().equals(msghint)) && binding.yearChip.isChecked()){
+            if((binding.pickYear.getText() != null) && (binding.pickYear.getText().length() != 0) && !(binding.pickYear.getText().equals(getString(R.string.yearHint))) && binding.yearChip.isChecked()){
                 ArtistsLocalService.addFilter(new ArtistFilter(getString(R.string.year_search, binding.pickYear.getText().toString()),
-                        artist -> artist.getAnnee().toLowerCase().equals(binding.pickYear.getText().toString().toLowerCase())));
+                        artist -> artist.hasParticipatedThisYear(binding.pickYear.getText().toString())));
             }
             if((binding.originSearch.getText() != null) && (binding.originSearch.getText().length() != 0) && binding.countryChip.isChecked() ) {
                 ArtistsLocalService.addFilter(new ArtistFilter(getString(R.string.country_search, binding.originSearch.getText().toString()),
@@ -68,7 +67,7 @@ public class SearchFragment extends Fragment{
                         artist -> artist.getArtistes().toLowerCase().contains(binding.searchName.getText().toString().toLowerCase())));
             }
 
-            if((binding.searchName.getText().length() == 0) && (binding.originSearch.getText().length() == 0 ) && (binding.pickYear.getText().equals(msghint))){
+            if((binding.searchName.getText().length() == 0) && (binding.originSearch.getText().length() == 0 ) && (binding.pickYear.getText().equals(getString(R.string.yearHint)))){
                 Toast.makeText(this.getContext(), getString(R.string.no_filter) ,Toast.LENGTH_SHORT).show();
             }
 

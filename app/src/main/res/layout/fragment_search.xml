@@ -62,19 +62,22 @@
                             android:checkable="true"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/search_name"/>
+                            android:text="@string/search_name"
+                            style="@style/Widget.MaterialComponents.Chip.Choice" />
                         <com.google.android.material.chip.Chip
                             android:id="@+id/year_chip"
                             android:checkable="true"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/search_year"/>
+                            android:text="@string/search_year"
+                            style="@style/Widget.MaterialComponents.Chip.Choice"/>
                         <com.google.android.material.chip.Chip
                             android:id="@+id/country_chip"
                             android:checkable="true"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/search_origin"/>
+                            android:text="@string/search_origin"
+                            style="@style/Widget.MaterialComponents.Chip.Choice"/>
 
                     </com.google.android.material.chip.ChipGroup>
 
@@ -82,11 +85,11 @@
                         android:layout_margin="16dp"
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
-                        android:layout_below="@id/email"
-                        android:background="?attr/colorPrimaryDark"
-                        />
+                        android:background="?attr/colorPrimaryDark" />
 
                     <LinearLayout
+                        android:visibility="gone"
+                        android:id="@+id/layout_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
@@ -110,17 +113,17 @@
                                 android:layout_height="wrap_content"
                                 android:id="@+id/searchName"/>
                         </com.google.android.material.textfield.TextInputLayout>
+
+                        <View
+                            android:layout_margin="16dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="?attr/colorPrimaryDark" />
                     </LinearLayout>
 
-                    <View
-                        android:layout_margin="16dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_below="@id/email"
-                        android:background="?attr/colorPrimaryDark"
-                        />
-
                     <LinearLayout
+                        android:visibility="gone"
+                        android:id="@+id/layout_year"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
@@ -138,18 +141,19 @@
                             android:text="@string/yearHint"
                             android:id="@+id/pick_year">
                         </Button>
+
+                        <View
+                            android:layout_margin="16dp"
+                            android:id="@+id/view"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="@color/colorPrimaryDark" />
                     </LinearLayout>
 
-                    <View
-                        android:layout_margin="16dp"
-                        android:id="@+id/view"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_below="@id/email"
-                        android:background="@color/colorPrimaryDark"
-                        />
 
                     <LinearLayout
+                        android:visibility="gone"
+                        android:id="@+id/layout_country"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical">
@@ -174,14 +178,13 @@
                                 android:id="@+id/originSearch"/>
                         </com.google.android.material.textfield.TextInputLayout>
 
+                        <View
+                            android:layout_margin="16dp"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:background="?attr/colorPrimaryDark" />
                     </LinearLayout>
 
-                    <View
-                        android:layout_margin="16dp"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_below="@id/email"
-                        android:background="?attr/colorPrimaryDark" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/search_button"

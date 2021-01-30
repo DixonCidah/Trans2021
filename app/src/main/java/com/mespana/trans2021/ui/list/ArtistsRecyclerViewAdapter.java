@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import com.mespana.trans2021.R;
 import com.mespana.trans2021.databinding.FragmentListItemBinding;
 import com.mespana.trans2021.models.Artist;
+import com.mespana.trans2021.services.ArtistsLocalService;
 import com.mespana.trans2021.services.RemotePictureService;
 import com.mespana.trans2021.services.handlers.ImageHandler;
 
@@ -23,13 +24,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 public class ArtistsRecyclerViewAdapter  extends RecyclerView.Adapter<ArtistsRecyclerViewAdapter.ViewHolder> {
 
-    private final List<Artist> artistList;
+    private final Activity activity;
 
-    private Activity activity;
-
-    public ArtistsRecyclerViewAdapter(Activity activity, List<Artist> items) {
+    public ArtistsRecyclerViewAdapter(Activity activity) {
         this.activity = activity;
-        artistList = items;
     }
 
     @Override
@@ -41,12 +39,12 @@ public class ArtistsRecyclerViewAdapter  extends RecyclerView.Adapter<ArtistsRec
     
     @Override
     public void onBindViewHolder(final ViewHolder holder, int position) {
-        holder.bind(artistList.get(position));
+        holder.bind(ArtistsLocalService.getArtistListFiltre().get(position));
     }
 
     @Override
     public int getItemCount() {
-        return artistList.size();
+        return ArtistsLocalService.getArtistListFiltre().size();
     }
 
     @Override

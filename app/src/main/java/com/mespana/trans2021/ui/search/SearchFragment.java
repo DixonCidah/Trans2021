@@ -10,6 +10,7 @@ import androidx.navigation.Navigation;
 import com.mespana.trans2021.R;
 import com.mespana.trans2021.databinding.FragmentSearchBinding;
 import com.mespana.trans2021.models.Artist;
+import com.mespana.trans2021.models.ArtistFilter;
 import com.mespana.trans2021.services.ArtistsLocalService;
 import com.whiteelephant.monthpicker.MonthPickerDialog;
 import java.util.ArrayList;
@@ -33,9 +34,18 @@ public class SearchFragment extends Fragment{
         binding.countryTextField.setEnabled(binding.countryChip.isChecked());
         binding.textField.setEnabled(binding.nameChip.isChecked());
         binding.pickYear.setClickable(binding.yearChip.isChecked());
-        binding.countryChip.setOnCheckedChangeListener((buttonView, isChecked) -> binding.countryTextField.setEnabled(isChecked));
-        binding.nameChip.setOnCheckedChangeListener((buttonView, isChecked) -> binding.textField.setEnabled(isChecked));
-        binding.yearChip.setOnCheckedChangeListener((buttonView, isChecked) -> binding.pickYear.setClickable(isChecked));
+        binding.countryChip.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            binding.layoutCountry.setVisibility(isChecked ? View.VISIBLE : View.GONE);
+            binding.countryTextField.setEnabled(isChecked);
+        });
+        binding.nameChip.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            binding.layoutName.setVisibility(isChecked ? View.VISIBLE : View.GONE);
+            binding.textField.setEnabled(isChecked);
+        });
+        binding.yearChip.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            binding.layoutYear.setVisibility(isChecked ? View.VISIBLE : View.GONE);
+            binding.pickYear.setClickable(isChecked);
+        });
         View root = binding.getRoot();
         chooseYearOnly();
         setSearchButtonAction();
@@ -44,38 +54,25 @@ public class SearchFragment extends Fragment{
 
     private void setSearchButtonAction() {
         binding.searchButton.setOnClickListener(v -> {
-            if((binding.pickYear.getText() != null) && (binding.pickYear.getText().length() != 0) && !(binding.pickYear.getText().equals(msghint))){
-                // Ajouter tous les artistes avec annee == searchYear
-                // Remplacer par un spinner avec les années ? (Possibilité de reprendre le code de Shervin)
-                ArtistsLocalService.getArtistFromYear(""+binding.pickYear.getText());
-                //ArtistsLocalService.setArtistListFiltre(artistFiltres);
+            ArtistsLocalService.resetFiltres();
+            if((binding.pickYear.getText() != null) && (binding.pickYear.getText().length() != 0) && !(binding.pickYear.getText().equals(msghint)) && binding.yearChip.isChecked()){
+                ArtistsLocalService.addFilter(new ArtistFilter(getString(R.string.year_search, binding.pickYear.getText().toString()),
+                        artist -> artist.getAnnee().toLowerCase().equals(binding.pickYear.getText().toString().toLowerCase())));
             }
-            if((binding.originSearch.getText() != null) && (binding.originSearch.getText().length() != 0) ) {
-                // Ajouter tous les artistes avec originSearch == originSearch
-                ArtistsLocalService.getArtistFromPlace(""+binding.originSearch.getText());
-                //ArtistsLocalService.setArtistListFiltre(artistFiltres);
+            if((binding.originSearch.getText() != null) && (binding.originSearch.getText().length() != 0) && binding.countryChip.isChecked() ) {
+                ArtistsLocalService.addFilter(new ArtistFilter(getString(R.string.country_search, binding.originSearch.getText().toString()),
+                        artist -> artist.getOrigine_pays1().toLowerCase().contains(binding.originSearch.getText().toString().toLowerCase())));
             }
-            if((binding.searchName.getText() != null) && (binding.searchName.getText().length() != 0 )) {
-                //Ajouter tous les artistes avec searchName == searchName
-                ArtistsLocalService.getArtistFromName(""+binding.searchName.getText());
-               // ArtistsLocalService.setArtistListFiltre(artistFiltres);
+            if((binding.searchName.getText() != null) && (binding.searchName.getText().length() != 0 ) && binding.nameChip.isChecked()) {
+                ArtistsLocalService.addFilter(new ArtistFilter(getString(R.string.name_search, binding.searchName.getText().toString()),
+                        artist -> artist.getArtistes().toLowerCase().contains(binding.searchName.getText().toString().toLowerCase())));
             }
 
             if((binding.searchName.getText().length() == 0) && (binding.originSearch.getText().length() == 0 ) && (binding.pickYear.getText().equals(msghint))){
                 Toast.makeText(this.getContext(), getString(R.string.no_filter) ,Toast.LENGTH_SHORT).show();
             }
-            else if(ArtistsLocalService.getArtistListFiltre().size() ==  0){
-                Toast.makeText(this.getContext(), getString(R.string.filter_no_match) ,Toast.LENGTH_SHORT).show();
-            }
-
-            // Afficher la liste des artistes trouvés via ListFragment.
-
-            for (Artist a : ArtistsLocalService.getArtistListFiltre()) {
-                Log.i("MainActivity","ANNEE/YEAR : "+a.getAnnee()+" Artiste : "+a.getArtistes()+" Origine : "+a.getOrigine_pays1());
-            }
 
             Navigation.findNavController(v).navigate(R.id.action_navigation_search_to_navigation_list);
-
         });
 
     }

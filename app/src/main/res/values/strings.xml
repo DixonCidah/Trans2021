@@ -47,4 +47,8 @@
     <string name="error_url_photo">L\'URL ne renvoie pas de photo</string>
     <string name="no_filter">Vous n\'avez pas mis de filtre.</string>
     <string name="filter_no_match">Nous n\'avons trouvé aucun groupe ou artiste avec ces filtres.</string>
+    <string name="country_search">Pays d\'origine: %1s</string>
+    <string name="year_search">Année: %1s</string>
+    <string name="name_search">Nom: %1s</string>
+    <string name="filtres">Filtres :</string>
 </resources>

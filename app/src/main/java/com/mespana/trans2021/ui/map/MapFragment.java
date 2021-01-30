@@ -120,7 +120,7 @@ public class MapFragment extends Fragment {
 
     private void createMarkersList() {
         items = new ArrayList<>();
-        for(Artist a : ArtistsLocalService.getArtistList()) {
+        for(Artist a : ArtistsLocalService.getArtistListFiltre()) {
             items.add(new OverlayItem(a.getRecordid(),
                     a.getArtistes(),
                     new GeoPoint(a.getGeo_point_2d_x(),a.getGeo_point_2d_y())));

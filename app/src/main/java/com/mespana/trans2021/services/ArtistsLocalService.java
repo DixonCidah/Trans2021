@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 
 import com.mespana.trans2021.R;
 import com.mespana.trans2021.models.Artist;
+import com.mespana.trans2021.models.ArtistFilter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -19,13 +20,14 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class ArtistsLocalService {
 
     private static List<Artist> artistList;
-    private static List<Artist> artistListFiltre = new ArrayList<>();
+    private static List<ArtistFilter> listOfFilters = new ArrayList<>();
 
     public static void parseJson(Activity context){
         SharedPreferencesService.load(context);
@@ -47,7 +49,6 @@ public class ArtistsLocalService {
                 final Artist artist = new Artist(jsonarray.getJSONObject(i));
                 artist.setFavorite(favArtists.contains(artist.getRecordid()));
                 artistList.add(artist);
-                artistListFiltre = artistList;
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -70,35 +71,31 @@ public class ArtistsLocalService {
         SharedPreferencesService.removeArtist(artist.getRecordid());
     }
 
-    public static List<Artist> getFavoriteArtists(){
-        return (artistList.stream().filter(artist -> artist.isFavorite())).collect(Collectors.toList());
-    }
-
     public static List<Artist> getArtistListFiltre(){
-        return Collections.unmodifiableList(artistListFiltre);
-    }
-    public static void setArtistListFiltre(List<Artist> listeArtistesFiltre){
-        artistListFiltre = listeArtistesFiltre;
-    }
-    public static List<Artist> getArtistFromYear(String year){
-        Stream<Artist> art = artistListFiltre.stream();
-        artistListFiltre = Collections.unmodifiableList( (List<Artist>) (art.filter(artist -> artist.getAnnee().equals(year)).distinct().collect(Collectors.toList())));
-        return artistListFiltre;
-    }
-
-    public static List<Artist> getArtistFromName(String name){
-        Stream<Artist> art = artistListFiltre.stream();
-        artistListFiltre = Collections.unmodifiableList( (List<Artist>) (art.filter(artist -> artist.getArtistes().equals(name)).distinct().collect(Collectors.toList())));
-        return artistListFiltre;
+        return artistList.stream().filter(artist -> {
+            for (ArtistFilter artistFilter : listOfFilters){
+                if (!artistFilter.getPredicate().test(artist)){
+                    return false;
+                }
+            }
+            return true;
+        }).collect(Collectors.toList());
     }
 
-    public static List<Artist> getArtistFromPlace(String place){
-        Stream<Artist> art = artistListFiltre.stream();
-        artistListFiltre = Collections.unmodifiableList( (List<Artist>) (art.filter(artist -> artist.getOrigine_pays1().equals(place)).distinct().collect(Collectors.toList())));
-        return artistListFiltre;
+    public static void addFilter(ArtistFilter artistFilter){
+        listOfFilters.add(artistFilter);
     }
+
+    public static List<ArtistFilter> getListOfFilters() {
+        return listOfFilters;
+    }
+
     public static void resetFiltres(){
-        artistListFiltre = artistList;
+        listOfFilters.clear();
+    }
+
+    public static void removeFilter(ArtistFilter artistFilter) {
+        listOfFilters.remove(artistFilter);
     }
 }
 

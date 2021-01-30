@@ -59,12 +59,11 @@ public class ProfileFragment extends Fragment {
                 changePhotoUrl();
             });
             refreshProfilePicture();
-            binding.list.setAdapter(new FavoriteArtistsRecyclerViewAdapter(getActivity(), ArtistsLocalService.getArtistList()/*TODO retrieve list through sharedPrefs*/));
             SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
             Set<String> favartists = sharedPref.getStringSet("FAVARTISTS", new HashSet<>());
             List<Artist> newList = new ArrayList<>();
-            for(Artist a : ArtistsLocalService.getArtistList()) {
-                if(favartists.contains(a.getRecordid())) newList.add(a);
+            for (String fav : favartists){
+                newList.add(ArtistsLocalService.getArtistFromRecordId(fav));
             }
             binding.list.setAdapter(new FavoriteArtistsRecyclerViewAdapter(getActivity(), newList));
         }

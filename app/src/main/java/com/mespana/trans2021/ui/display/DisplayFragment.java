@@ -157,7 +157,6 @@ public class DisplayFragment extends Fragment implements EventListener<QuerySnap
                         binding.spotifyPlay.setBackground(requireContext().getDrawable(R.drawable.ic_pause));
                         binding.spotifyPlay.setTag("play");
                     } catch (Exception e) {
-                        Toast.makeText(getContext(), R.string.can_t_open_spotify, Toast.LENGTH_SHORT).show();
                         try {
                             String url = getString(R.string.url_spotify);
                             String[] tokens = spotify.split(":");

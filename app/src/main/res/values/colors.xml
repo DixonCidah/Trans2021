@@ -9,4 +9,10 @@
     <color name="white">#FFFFFFFF</color>
     <color name="gray">#A2A2A2</color>
     <color name="rennes">#E6174E</color>
+
+    <color name="blue_trans">#007cba</color>
+    <color name="dark_blue">#0a003f</color>
+    <color name="blue_20">#005a87</color>
+    <color name="blue_10">#006ba1</color>
+    <color name="secondary_trans">#89f0ff</color>
 </resources>

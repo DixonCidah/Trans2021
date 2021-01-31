@@ -8,6 +8,7 @@ import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -63,6 +64,12 @@ public class CommentsFragment extends Fragment {
                         artist.getRecordid());
                 FirebaseService.postComment(comment);
                 this.binding.filledTextField.getEditText().setText("");
+                Context context = getContext();
+                if(context != null) {
+                    InputMethodManager inputManager = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                    if(inputManager != null) inputManager.hideSoftInputFromWindow(getActivity().getCurrentFocus().getWindowToken(),InputMethodManager.HIDE_NOT_ALWAYS);
+                }
+                this.binding.recyclerView.smoothScrollToPosition(0);
             }else{
                 ((MainActivity)getActivity()).needsToSignIn();
             }
